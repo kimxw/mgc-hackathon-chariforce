@@ -109,15 +109,13 @@
    finish, phases 2/3 just long enough to hold as their own "slide" before
    handing off to the next. The actual UI (panels/timeline/bar) is
    fixed-position chrome shared across all three — see phases-overlay. */
-/* Fine graph-paper grid, CAD-workspace style — #story sits at z-index:1,
-   above the fixed 3D canvas (z-index:0, canvas.css), so this paints over
-   the live chair render rather than the canvas painting over it; the
-   background is transparent between the lines so the chair still shows
-   through. */
-.phase-scroll{position:relative;padding:0;
-  background-image:linear-gradient(to right, var(--line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
-  background-size:40px 40px}
+/* The CAD-workspace grid lives on the 3D scene's own background
+   (engine/scene.js's buildGridTexture, see textures.js) rather than as a
+   DOM background-image here — a DOM layer sits above the canvas
+   (#story is z-index:1, canvas.css's #cv is z-index:0), so its grid lines
+   would draw across the chair itself instead of behind it, and would also
+   scroll along with this (very tall) section instead of staying put. */
+.phase-scroll{position:relative;padding:0}
 #sec-phase1{height:340vh}
 #sec-phase2{height:150vh}
 #sec-phase3{height:150vh}
