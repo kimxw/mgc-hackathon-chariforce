@@ -4,14 +4,14 @@ html,body{margin:0;background:var(--bg);color:var(--txt);
   font:var(--fs-body)/1.5 var(--font-sans);-webkit-font-smoothing:antialiased}
 body{min-height:100%}
 
-::selection{background:rgba(47,111,224,.25)}
+::selection{background:rgba(20,20,20,.2)}
 
 a{color:inherit}
 
 .eyebrow{display:inline-block;font:600 var(--fs-eyebrow)/1 var(--font-mono);letter-spacing:1.4px;
   text-transform:uppercase;color:var(--accent);margin:0 0 16px}
 
-h1,h2,h3{margin:0;font-weight:650;letter-spacing:-.01em}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.01em}
 p{margin:0}
 
 .container{max-width:var(--content-w);margin:0 auto;padding:0 var(--gutter)}

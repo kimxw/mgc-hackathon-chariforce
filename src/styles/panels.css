@@ -33,7 +33,7 @@ body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!
 .cf-brand{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
 .cf-brand h1{font-size:21px;margin:0;letter-spacing:-.01em;font-weight:750}
 .cf-tag{font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--accent);
-  border:1px solid rgba(47,111,224,.35);border-radius:4px;padding:2.5px 7px}
+  border:1px solid rgba(20,20,20,.35);border-radius:4px;padding:2.5px 7px}
 .cf-sub{font-size:13px;color:var(--txt-dim);line-height:1.5;margin:0 0 18px}
 
 .cf-grp{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
@@ -48,19 +48,19 @@ body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!
 .cf-btn{flex:1;background:#eeede8;color:var(--txt);border:1px solid var(--line2);border-radius:var(--radius-sm);
   padding:7px 4px;font-size:11px;cursor:pointer;transition:.12s;white-space:nowrap}
 .cf-btn:hover{background:#e5e3dc;border-color:#b9b6ad}
-.cf-btn.on{background:var(--accent-dark);border-color:#2f6fb8;color:#fff}
+.cf-btn.on{background:var(--accent-dark);border-color:#000;color:#fff}
 
 .cf-step{display:flex;gap:11px;align-items:flex-start;padding:9px 10px;border-radius:var(--radius-sm);cursor:pointer;
   border:1px solid transparent;transition:.14s;margin-bottom:4px}
 .cf-step:hover{background:#f0efea}
-.cf-step.act{background:rgba(47,111,224,.08);border-color:rgba(47,111,224,.3)}
+.cf-step.act{background:rgba(20,20,20,.06);border-color:rgba(20,20,20,.25)}
 .cf-step.done .cf-num{background:var(--good);border-color:var(--good);color:#fff}
 .cf-num{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid #d2cfc6;
   display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--txt-dim);margin-top:1px;transition:.14s}
 .cf-step.act .cf-num{background:var(--accent);border-color:var(--accent);color:#fff}
 .cf-step .t{font-size:13.5px;font-weight:600;line-height:1.3}
 .cf-step .d{font-size:11.5px;color:var(--txt-dim);line-height:1.4;margin-top:2px}
-.cf-step.act .d{color:#3f567a}
+.cf-step.act .d{color:var(--txt-dim)}
 
 .cf-row{display:flex;justify-content:space-between;gap:8px;padding:3.5px 0;font-size:11.5px}
 .cf-row span{color:var(--txt-dim)}
@@ -76,11 +76,11 @@ body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!
 .cf-opt{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:var(--radius-sm);cursor:pointer;
   border:1px solid var(--line);background:#f5f4ef;margin-bottom:5px;transition:.13s}
 .cf-opt:hover{border-color:#c7c4bb;background:#eeede6}
-.cf-opt.on{border-color:rgba(47,111,224,.5);background:rgba(47,111,224,.08)}
+.cf-opt.on{border-color:rgba(20,20,20,.45);background:rgba(20,20,20,.06)}
 .cf-opt.disabled{cursor:default;opacity:.55}
 .cf-opt.disabled:hover{border-color:var(--line);background:#f5f4ef}
 .cf-dot{flex:none;width:9px;height:9px;border-radius:50%;background:#cac7bd;transition:.13s}
-.cf-opt.on .cf-dot{background:var(--accent);box-shadow:0 0 0 3px rgba(47,111,224,.18)}
+.cf-opt.on .cf-dot{background:var(--accent);box-shadow:0 0 0 3px rgba(20,20,20,.16)}
 .cf-opt .n{font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px}
 .cf-opt .s{font-size:10px;color:var(--txt-dim);margin-top:.5px}
 .cf-badge{font:600 8.5px/1 var(--font-mono);letter-spacing:.5px;text-transform:uppercase;color:var(--txt-faint);

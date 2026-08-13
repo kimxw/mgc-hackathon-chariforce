@@ -114,7 +114,6 @@ export function buildPhasesSection() {
     if (n === 1) barSlot.appendChild(p1.barContent);
     document.body.classList.toggle('mobile-has-bar', n === 1); // mobile CSS lifts the stacked panels clear of the bar
 
-    bed.visible = contact.visible = (n === 1);
     const cam = store.get().camera;
     if (n === 1) {
       store.set({ spin: false, patient: true });
@@ -125,7 +124,16 @@ export function buildPhasesSection() {
     }
     apply();
     store.set({ autoFit: true });
-    requestAnimationFrame(fitView);
+    // bed/contact visibility waits for the SAME rAF as fitView, rather than
+    // flipping on immediately — otherwise there's a frame (or several, on a
+    // slow scroll) where the bed is already visible but the camera hasn't
+    // reframed to phase 1's establishing angle yet, i.e. the bed briefly
+    // renders wherever it sits under the *previous* section's camera angle,
+    // reading as a stray model flashing on screen.
+    requestAnimationFrame(() => {
+      fitView();
+      bed.visible = contact.visible = (n === 1);
+    });
     byPhase[n].refresh?.();
   }
 

@@ -12,8 +12,7 @@ export function buildHero() {
 
   const copy = el('div', { class: 'hero-copy' }, [
     el('span', { class: 'eyebrow' }, c.eyebrow),
-    el('h1', { class: 'hero-brand' }, [document.createTextNode('Chair '), el('span', {}, 'Force')]),
-    el('p', { class: 'hero-tagline' }, c.h1),
+    el('h1', { class: 'hero-tagline' }, c.h1),
     el('p', { class: 'lede' }, c.lede),
     el('div', { class: 'hero-actions' }, [
       el('a', { class: 'btn btn-primary', href: '#sec-phase1' }, c.ctaPrimary),

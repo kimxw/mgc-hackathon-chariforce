@@ -3,12 +3,16 @@ import { content } from '../../content.js';
 
 export function buildFeatures() {
   const c = content.features;
-  // Image is a placeholder path — nothing exists at /img/features/*.jpg yet.
-  // Until a real photo lands there, the alt text is what actually renders in
-  // the broken-image box, so it doubles as the content brief for that shot.
+  // Image is a placeholder path — nothing exists at /img/features/*.jpg yet
+  // for items without a real photo. Until a real photo lands there, the alt
+  // text is what actually renders in the broken-image box, so it doubles
+  // as the content brief for that shot. `video: true` items instead play a
+  // looping, muted, autoplaying clip from /img/features/{id}.mp4.
   const cards = c.items.map((it) => el('div', { class: `bento-card bento-${it.id}` }, [
     el('div', { class: 'bento-media' }, [
-      el('img', { src: `/img/features/${it.id}.jpg`, alt: it.imgAlt, loading: 'lazy' }),
+      it.video
+        ? el('video', { src: `/img/features/${it.id}.mp4`, autoplay: '', muted: '', loop: '', playsinline: '', 'aria-label': it.imgAlt })
+        : el('img', { src: `/img/features/${it.id}.jpg`, alt: it.imgAlt, loading: 'lazy' }),
     ]),
     el('div', { class: 'bento-body' }, [
       el('h4', {}, it.title),

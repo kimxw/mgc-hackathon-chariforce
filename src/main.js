@@ -17,6 +17,8 @@ import { tick } from './engine/loop.js';
 
 import { el } from './ui/dom.js';
 import { buildNav } from './ui/chrome/nav.js';
+import { buildHeroCover } from './ui/sections/heroCover.js';
+import { buildPartners } from './ui/sections/partners.js';
 import { buildHero } from './ui/sections/hero.js';
 import { buildFeatures } from './ui/sections/features.js';
 import { buildPhasesSection } from './ui/sections/phases/index.js';
@@ -30,6 +32,8 @@ const phases = buildPhasesSection();
 
 app.appendChild(buildNav());
 app.appendChild(el('main', { id: 'story' }, [
+  buildHeroCover(),
+  buildPartners(),
   buildHero(),
   buildFeatures(),
   ...phases.sectionEls,

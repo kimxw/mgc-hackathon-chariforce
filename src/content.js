@@ -26,10 +26,10 @@ export const content = {
     eyebrow: 'Under the hood',
     h2: 'Everything the chair actually does.',
     items: [
-      { id: 'lift', title: 'Powered height lift', desc: 'A telescoping column raises or lowers the entire seat to match the bed, sofa, or toilet, to the millimetre.', imgAlt: 'Photo of the powered height-lift column raising the seat to meet a bed' },
-      { id: 'armrest', title: 'Rearward-swing armrest', desc: 'The transfer-side armrest pivots clear on its own post, without ever sweeping across the person seated.', imgAlt: 'Photo of the transfer-side armrest swung clear on its pivot' },
+      { id: 'lift', title: 'Ease of transfer', desc: 'A telescoping column raises or lowers the entire seat to match the bed, sofa, or toilet, to the millimetre.', video: true, imgAlt: 'Video of the powered height-lift column raising the seat to meet a bed' },
+      { id: 'armrest', title: 'Grows with the person', desc: 'Cup holder, canopy, storage, tray table, IV pole: clip a new module onto the same universal rail as needs change.', imgAlt: 'Photo of clip-on modules (tray table, canopy, storage) mounted on the universal rail' },
       { id: 'rails', title: 'Telescoping transfer rails', desc: 'The seat and backrest ride out on their own rails, bridging the gap to the target surface.', imgAlt: 'Photo of the seat and backrest extended out on telescoping transfer rails' },
-      { id: 'modular', title: 'Grows with the person', desc: 'Cup holder, canopy, storage, tray table, IV pole: clip a new module onto the same universal rail as needs change.', imgAlt: 'Photo of clip-on modules (tray table, canopy, storage) mounted on the universal rail' },
+      { id: 'modular', title: 'Powered height, adjusted', desc: 'The seat rises and lowers to meet the bed, sofa, or toilet exactly.', imgAlt: 'Photo of the seat at a lowered height, level with a bed' },
       { id: 'wheels', title: 'Wheels for the terrain', desc: 'Standard, all-terrain, or powered hub: the same chassis, fitted for how someone actually gets around.', imgAlt: 'Photo of the chair fitted with all-terrain wheels' },
     ],
   },
