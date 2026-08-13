@@ -103,13 +103,7 @@ body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!
    just via z-index this time instead of pad math */
 .cf-hint{position:fixed;bottom:16px;left:16px;font-size:10.5px;color:var(--txt-faint);line-height:1.5;z-index:3}
 
-body.cine .cf-chrome{opacity:0;pointer-events:none}
 .cf-chrome{transition:opacity .3s}
-.cf-cine-exit{position:fixed;top:16px;left:16px;padding:8px 13px;font-size:11px;color:var(--txt-dim);
-  background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:8px;display:none;z-index:9;
-  opacity:.35;transition:.2s}
-body.cine .cf-cine-exit{display:block}
-.cf-cine-exit:hover{opacity:1}
 
 /* Mobile: the two fixed side panels (302px + 264px) don't fit next to a
    usable 3D view on a phone screen. Stack them at the bottom instead,
@@ -128,5 +122,4 @@ body.cine .cf-cine-exit{display:block}
      competing with the timeline/CTA for top-of-screen space */
   .cf-viewbar{top:60px;width:150px;padding:7px;gap:4px}
   .cf-viewbar .cf-btn{padding:5px 3px;font-size:9px}
-  .cf-viewbar .cf-vb-row:last-child{display:none}
 }

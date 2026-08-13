@@ -3,10 +3,8 @@ import { store } from '../../../config/store.js';
 import { bed } from '../../../engine/surface.js';
 import { contact } from '../../../engine/surface.js';
 import { apply } from '../../../engine/apply.js';
-import { setXray } from '../../../engine/xray.js';
 import { view, fitView } from '../../../engine/cameraRig.js';
 import { registerPad } from '../../../engine/panelRegistry.js';
-import { setPlay } from '../../../engine/playback.js';
 import { buildPhase1 } from './phase1Transfer.js';
 import { buildPhase2 } from './phase2Modular.js';
 import { buildPhase3 } from './phase3Configure.js';
@@ -64,27 +62,11 @@ export function buildPhasesSection() {
   btnPat.onclick = () => { store.set({ patient: !store.get().patient }); apply(); };
   const btnSpin = el('button', { class: 'cf-btn', title: 'Toggle auto-rotate' }, 'Spin');
   btnSpin.onclick = () => store.set({ spin: !store.get().spin });
-  const btnMech = el('button', { class: 'cf-btn', title: 'X-ray the mechanism' }, 'X-ray');
-  btnMech.onclick = () => { store.set({ xray: !store.get().xray }); setXray(store.get().xray); apply(); };
-  const btnCine = el('button', { class: 'cf-btn', title: 'Cinematic mode, for filming' }, 'Cinematic');
-  const cineExit = el('div', { class: 'cf-cine-exit' }, 'Esc to exit cinematic');
-  function exitCine() {
-    document.body.classList.remove('cine');
-    setTimeout(() => { if (store.get().autoFit) fitView(); }, 330);
-  }
-  btnCine.onclick = () => {
-    document.body.classList.add('cine');
-    setTimeout(() => { if (store.get().autoFit) fitView(); }, 330);
-    store.set({ t: 0 });
-    setPlay(true);
-  };
-  cineExit.onclick = exitCine;
   addEventListener('keydown', (e) => {
     // don't hijack space/F while the user is typing (e.g. the quote-request
-    // email field) — Escape still works everywhere, matching browser norms
+    // email field)
     const tag = document.activeElement?.tagName;
     const typing = tag === 'INPUT' || tag === 'TEXTAREA';
-    if (e.key === 'Escape') exitCine();
     if (typing) return;
     if (e.key === 'f' || e.key === 'F') btnFit.onclick();
     if (e.key === ' ' && store.get().phase === 1) { e.preventDefault(); document.getElementById('bPlay')?.click(); }
@@ -93,7 +75,6 @@ export function buildPhasesSection() {
   const viewBar = el('div', { class: 'cf-panel cf-viewbar cf-chrome' }, [
     el('div', { class: 'cf-vb-row' }, [btnIso, btnFront, btnTop]),
     el('div', { class: 'cf-vb-row' }, [btnFit, btnPat, btnSpin]),
-    el('div', { class: 'cf-vb-row' }, [btnMech, btnCine]),
   ]);
 
   function syncViewButtons() {
@@ -101,7 +82,6 @@ export function buildPhasesSection() {
     btnFit.classList.toggle('on', s.autoFit);
     btnPat.classList.toggle('on', s.patient);
     btnSpin.classList.toggle('on', s.spin);
-    btnMech.classList.toggle('on', s.xray);
   }
   syncViewButtons();
   store.subscribe(syncViewButtons);
@@ -152,7 +132,7 @@ export function buildPhasesSection() {
   // The overlay (panels/bar/hint) is fixed-position chrome, shown or hidden
   // by phaseScroll.js via body.phases-active — it doesn't need to live
   // "inside" any one phase section, so it's just parked in phase 1's.
-  const overlay = el('div', { class: 'phases-overlay' }, [leftPanel, rightPanel, viewBar, barSlot, hint, cineExit]);
+  const overlay = el('div', { class: 'phases-overlay' }, [leftPanel, rightPanel, viewBar, barSlot, hint]);
 
   // Three separate scroll-length sections, IKEA-configurator style: phase 1
   // is tall enough that scrolling through it scrubs the transfer animation

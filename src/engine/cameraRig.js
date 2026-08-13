@@ -12,7 +12,6 @@ const _box = new THREE.Box3(), _bb = new THREE.Box3(), _p = new THREE.Vector3();
 let _corners = [], _radius = 1;
 
 export function panelPad() {
-  if (document.body.classList.contains('cine')) return { l: 20, r: 20, b: 20 };
   return computePad();
 }
 
@@ -92,17 +91,28 @@ export function manual() {
   if (store.get().autoFit) store.set({ autoFit: false });
 }
 
+// Listens on `document` rather than `#cv` itself, and gates on
+// body.phases-active + a .cf-chrome exclusion, instead of relying on the
+// canvas actually winning the pointer/wheel hit-test against whatever DOM
+// sits over it at z-index:1 (#story, canvas.css). That hit-test depends on
+// every section along the way correctly making itself click-through, which
+// is fragile; this way orbit-drag works regardless of what's in the DOM
+// above the canvas, and is only live during the phases the chair is
+// actually visible in.
 let dragging = false, panning = false, lx = 0, ly = 0;
-const cv = document.getElementById('cv');
-cv.addEventListener('contextmenu', (e) => e.preventDefault());
-cv.addEventListener('pointerdown', (e) => {
+function activeAndNotChrome(e) {
+  return document.body.classList.contains('phases-active') && !e.target.closest('.cf-chrome');
+}
+document.addEventListener('contextmenu', (e) => { if (activeAndNotChrome(e)) e.preventDefault(); });
+document.addEventListener('pointerdown', (e) => {
+  if (!activeAndNotChrome(e)) return;
   dragging = true; panning = (e.button === 2 || e.button === 1 || e.shiftKey);
-  lx = e.clientX; ly = e.clientY; cv.setPointerCapture(e.pointerId);
+  lx = e.clientX; ly = e.clientY;
   if (store.get().spin) store.set({ spin: false });
 });
-cv.addEventListener('pointerup', () => { dragging = false; });
-cv.addEventListener('pointercancel', () => { dragging = false; });
-cv.addEventListener('pointermove', (e) => {
+document.addEventListener('pointerup', () => { dragging = false; });
+document.addEventListener('pointercancel', () => { dragging = false; });
+document.addEventListener('pointermove', (e) => {
   if (!dragging) return;
   const dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
   const cam = store.get().camera;
@@ -115,11 +125,9 @@ cv.addEventListener('pointermove', (e) => {
     if (store.get().autoFit) fitView(); else updCam();
   }
 });
-cv.addEventListener('wheel', (e) => {
-  e.preventDefault(); manual();
-  const cam = store.get().camera;
-  cam.radius = clamp(cam.radius * (1 + Math.sign(e.deltaY) * 0.1), 0.4, 40); updCam();
-}, { passive: false });
+// Wheel is deliberately left alone — it stays plain page scroll (which is
+// how phaseScroll.js scrubs the phase 1 animation) rather than being
+// hijacked into a camera-zoom gesture.
 
 export function view(th, ph) {
   const cam = store.get().camera;

@@ -131,7 +131,7 @@
 .cf-acc-section.done .cf-acc-vline{background:var(--accent)}
 .cf-tl-badge{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line2);background:var(--bg-raised);
   display:grid;place-items:center;font:600 13px/1 var(--font-mono);color:var(--txt-faint);transition:.15s;flex:none}
-.cf-acc-section.done .cf-tl-badge{background:var(--accent-dark);border-color:var(--accent);color:var(--accent)}
+.cf-acc-section.done .cf-tl-badge{background:var(--good);border-color:var(--good);color:#fff}
 .cf-acc-section.current .cf-tl-badge{background:var(--accent);border-color:var(--accent);color:#fff;
   box-shadow:0 0 0 4px rgba(47,111,224,.16)}
 .cf-acc-main{flex:1;min-width:0;padding-bottom:16px}
