@@ -11,7 +11,7 @@ export function buildFeatures() {
   const cards = c.items.map((it) => {
     const media = it.video
       ? el('video', { src: `/img/features/${it.id}.mp4`, autoplay: '', muted: '', loop: '', playsinline: '', 'aria-label': it.imgAlt })
-      : el('img', { src: `/img/features/${it.id}.jpg`, alt: it.imgAlt, loading: 'lazy' });
+      : el('img', { src: it.img || `/img/features/${it.id}.jpg`, alt: it.imgAlt, loading: 'lazy' });
     // Attributes alone don't reliably autoplay elements built via createElement,
     // so kick playback explicitly too (muted required or the browser rejects it).
     if (it.video) {

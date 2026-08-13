@@ -4,6 +4,7 @@ import { solve } from './solver.js';
 import { chair, liftMid, liftInner, LIFT_TOP_FIXED } from './chassis.js';
 import { carriage, railMid, seatCar, armPivot, backPivot, seatWidthNow } from './seat.js';
 import { patient, torsoGrp, knees, beltPivot } from './patient.js';
+import { matBelt, matBuckle } from './materials.js';
 import { bed, bedLegs, bedHead, contact } from './surface.js';
 import { readout, syncSteps } from './readout.js';
 import { fitView } from './cameraRig.js';
@@ -37,14 +38,15 @@ export function apply() {
   const kneeAng = -84 * (Math.PI / 180) * R.p2;
   knees.forEach((k) => { k.rotation.x = kneeAng; });
 
-  // seatbelt: worn through the height-match, unbuckled early in "Open the
-  // side" — clear of the occupant well before the armrest finishes and the
-  // rails start bridging. Swings from its fixed backrest-top anchor (like a
-  // real retractable belt) and stays on the chair once they slide off.
-  const beltOff = clamp(R.p1 / 0.45, 0, 1);
-  beltPivot.rotation.y = beltOff * 100 * (Math.PI / 180);
-  beltPivot.rotation.x = beltOff * -25 * (Math.PI / 180);
-  beltPivot.visible = s.patient;
+  // seatbelt: worn while the seat matches height, unbuckled during the tail
+  // of that same phase so it's fully off — not mid-unbuckle — by the time
+  // "Open the side" starts and the armrest begins swinging (R.armA below).
+  // Fades out in place rather than swinging like the armrest.
+  const beltOff = clamp((R.p0 - 0.55) / 0.45, 0, 1);
+  const beltOpacity = 1 - beltOff;
+  matBelt.opacity = beltOpacity;
+  matBuckle.opacity = beltOpacity;
+  beltPivot.visible = s.patient && beltOpacity > 0.01;
 
   // occupant: rides the seat, then slides laterally onto the surface
   patient.visible = s.patient;

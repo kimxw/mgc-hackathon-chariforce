@@ -38,6 +38,7 @@
   gap:clamp(40px,7vw,90px);padding-left:28px}
 .partner-logo{flex:none;display:flex;align-items:center;justify-content:center;height:56px}
 .partner-logo img{height:100%;width:auto;object-fit:contain}
+.partner-logo-lg{height:84px}
 .partner-logo-text{font:800 32px/1 var(--font-sans);letter-spacing:-.01em;color:#8dc63f}
 
 /* ---- Hero — product-photo landing layout ----

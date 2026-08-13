@@ -30,7 +30,7 @@ export const content = {
       { id: 'armrest', title: 'Transfer mechanism works with various surfaces', desc: 'Standard, all-terrain, or powered hub: the same chassis, fitted for how someone actually gets around.', video: true, imgAlt: 'Video of the transfer mechanism working across different surfaces' },
       { id: 'rails', title: 'Powered height, adjusted', desc: 'The seat rises and lowers to meet the bed, sofa, or toilet exactly.', imgAlt: 'Photo of the seat and backrest extended out on telescoping transfer rails' },
       { id: 'modular', title: 'Telescoping transfer rails', desc: 'The seat and backrest ride out on their own rails, bridging the gap to the target surface.', imgAlt: 'Photo of the telescoping rail assembly with quick-release clamps and a clip-on cup holder module' },
-      { id: 'wheels', title: 'Grows with the person', desc: 'Cup holder, canopy, storage, tray table, IV pole: clip a new module onto the same universal rail as needs change.', imgAlt: 'Photo of clip-on modules (tray table, canopy, storage) mounted on the universal rail' },
+      { id: 'wheels', title: 'Grows with the person', desc: 'Cup holder, canopy, storage, tray table, IV pole: clip a new module onto the same universal rail as needs change.', img: '/img/features/attachments.png', imgAlt: 'Photo of clip-on modules — cup holder, umbrella arm, all-terrain wheels, and a storage case — that mount on the universal rail' },
     ],
   },
 

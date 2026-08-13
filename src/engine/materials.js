@@ -47,3 +47,6 @@ export const matCanopy = M(0x3a5f86, 0.62, 0.03); // waxed-canvas sheen, not a U
 // wheelchair lap belts actually contrast against black upholstery.
 export const matBelt = bump(M(0xa33326, 0.75, 0.05), fabricBump, 0.0004);
 export const matBuckle = bump(M(0x8c8f92, 0.28, 0.85), brushedBump, 0.0002);
+// unbuckling fades the belt out rather than swinging it like the armrest
+matBelt.transparent = true;
+matBuckle.transparent = true;

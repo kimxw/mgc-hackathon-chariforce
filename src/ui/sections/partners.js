@@ -10,13 +10,13 @@ import { el, section } from '../dom.js';
 // genuinely not drawn), so that one's a styled text wordmark in their
 // brand green instead of a broken-looking logo.
 const LOGOS = [
-  { name: 'SingHealth', img: '/img/partners/singhealth.png' },
+  { name: 'SingHealth', img: '/img/partners/singhealth.png', big: true },
   { name: 'SG Enable', text: 'SG Enable' },
-  { name: 'Enabling Village', img: '/img/partners/enabling-village.png' },
+  { name: 'Enabling Village', img: '/img/partners/enabling-village.png', big: true },
 ];
 
-function buildLogo({ name, img, text }) {
-  return el('div', { class: 'partner-logo' }, [
+function buildLogo({ name, img, text, big }) {
+  return el('div', { class: `partner-logo${big ? ' partner-logo-lg' : ''}` }, [
     img
       ? el('img', { src: img, alt: name, loading: 'lazy' })
       : el('span', { class: 'partner-logo-text' }, text),
