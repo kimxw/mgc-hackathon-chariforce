@@ -127,7 +127,7 @@
 #sec-features{background:var(--bg)}
 .bento-grid{display:flex;flex-direction:column;gap:20px;max-width:1040px}
 .bento-row{display:grid;gap:20px}
-.bento-row-top{grid-template-columns:1.15fr .85fr}
+.bento-row-top{grid-template-columns:1fr 1fr}
 .bento-row-bottom{grid-template-columns:repeat(3,1fr)}
 .bento-card{background:var(--bg-raised);border:1px solid var(--line);border-radius:26px;
   display:flex;flex-direction:column;gap:22px;overflow:hidden;
@@ -219,6 +219,7 @@
 .subsidy-sub{font-size:12px;color:var(--txt-dim);margin-top:8px}
 .subsidy-fine{font-size:11px;color:var(--txt-faint);line-height:1.6;margin-top:16px}
 .quote-form{display:flex;flex-direction:column;gap:10px;margin:24px 0 12px}
+.quote-form .btn{align-self:flex-start}
 .quote-form input{background:var(--bg-raised);border:1px solid var(--line2);border-radius:var(--radius-sm);
   color:var(--txt);padding:13px 14px;font-size:14px;font-family:inherit}
 .quote-form input:focus{outline:2px solid var(--accent);outline-offset:1px}

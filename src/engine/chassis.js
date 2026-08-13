@@ -1,5 +1,5 @@
 import { D2R, P } from './constants.js';
-import { box, at } from './geo.js';
+import { box, at, strut } from './geo.js';
 import { matFrame, matFootplate } from './materials.js';
 import { brushedBump } from './textures.js';
 import { scene } from './scene.js';
@@ -17,6 +17,10 @@ export const base = new THREE.Group(); chair.add(base);
   base.add(at(box(28, 210, 28, matFootplate), s * 142, 116, P.castZ + 92));   // footplate arm
   const fp = box(150, 16, 190, matFootplate); fp.rotation.x = -6 * D2R;
   base.add(at(fp, s * 120, 20, P.castZ + 162));                              // footplate
+  // footplate arm otherwise floats disconnected from the frame — brace it
+  // back to the caster drop, the nearest existing frame member.
+  base.add(strut({ x: s * 228, y: 117, z: P.castZ - 30 }, { x: s * 142, y: 200, z: P.castZ + 92 }, matFrame, 12));
+  base.add(strut({ x: s * 228, y: 60, z: P.castZ - 30 }, { x: s * 142, y: 30, z: P.castZ + 92 }, matFrame, 12));
 });
 base.add(at(box(490, 30, 30, matFrame), 0, P.frameY, 190));
 base.add(at(box(490, 26, 26, matFrame), 0, P.frameY, -40));

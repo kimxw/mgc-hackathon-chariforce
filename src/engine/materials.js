@@ -43,3 +43,7 @@ export const matAcc2 = M(0x2f7a5c, 0.42, 0.55);
 export const matTray = bump(M(0x53565c, 0.5, 0.04), brushedBump, 0.0003); // molded plastic, not metal
 export const matBag = bump(M(0x24272c, 0.88, 0), fabricBump, 0.0006);
 export const matCanopy = M(0x3a5f86, 0.62, 0.03); // waxed-canvas sheen, not a UI blue
+// Postural seatbelt — red nylon webbing with a plated-steel buckle, the way
+// wheelchair lap belts actually contrast against black upholstery.
+export const matBelt = bump(M(0xa33326, 0.75, 0.05), fabricBump, 0.0004);
+export const matBuckle = bump(M(0x8c8f92, 0.28, 0.85), brushedBump, 0.0002);

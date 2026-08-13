@@ -36,6 +36,18 @@ export function strut(p1, p2, mat, thickness = 4, seg = 6) {
   m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
   return m;
 }
+// like strut() but a flat strap instead of a round rod — for webbing
+// (seatbelts) that needs a rectangular cross-section, not a rope.
+export function flatStrut(p1, p2, mat, width = 26, thickness = 14) {
+  const dx = p2.x - p1.x, dy = p2.y - p1.y, dz = p2.z - p1.z;
+  const len = Math.hypot(dx, dy, dz);
+  const m = box(width, len, thickness, mat);
+  at(m, (p1.x + p2.x) / 2, (p1.y + p2.y) / 2, (p1.z + p2.z) / 2);
+  const dir = new THREE.Vector3(dx, dy, dz).normalize();
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+  return m;
+}
+
 export function clear(g) {
   while (g.children.length) {
     const c = g.children.pop();

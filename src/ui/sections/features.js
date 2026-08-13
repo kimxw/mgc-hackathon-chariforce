@@ -8,17 +8,24 @@ export function buildFeatures() {
   // text is what actually renders in the broken-image box, so it doubles
   // as the content brief for that shot. `video: true` items instead play a
   // looping, muted, autoplaying clip from /img/features/{id}.mp4.
-  const cards = c.items.map((it) => el('div', { class: `bento-card bento-${it.id}` }, [
-    el('div', { class: 'bento-media' }, [
-      it.video
-        ? el('video', { src: `/img/features/${it.id}.mp4`, autoplay: '', muted: '', loop: '', playsinline: '', 'aria-label': it.imgAlt })
-        : el('img', { src: `/img/features/${it.id}.jpg`, alt: it.imgAlt, loading: 'lazy' }),
-    ]),
-    el('div', { class: 'bento-body' }, [
-      el('h4', {}, it.title),
-      el('p', {}, it.desc),
-    ]),
-  ]));
+  const cards = c.items.map((it) => {
+    const media = it.video
+      ? el('video', { src: `/img/features/${it.id}.mp4`, autoplay: '', muted: '', loop: '', playsinline: '', 'aria-label': it.imgAlt })
+      : el('img', { src: `/img/features/${it.id}.jpg`, alt: it.imgAlt, loading: 'lazy' });
+    // Attributes alone don't reliably autoplay elements built via createElement,
+    // so kick playback explicitly too (muted required or the browser rejects it).
+    if (it.video) {
+      media.muted = true;
+      media.play().catch(() => {});
+    }
+    return el('div', { class: `bento-card bento-${it.id}` }, [
+      el('div', { class: 'bento-media' }, [media]),
+      el('div', { class: 'bento-body' }, [
+        el('h4', {}, it.title),
+        el('p', {}, it.desc),
+      ]),
+    ]);
+  });
 
   return section('sec-features', '', [
     el('span', { class: 'eyebrow' }, c.eyebrow),

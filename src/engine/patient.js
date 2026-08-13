@@ -1,5 +1,5 @@
-import { box, cyl, sph, at } from './geo.js';
-import { matPants, matCloth, matSkin, matGrip } from './materials.js';
+import { box, cyl, sph, at, flatStrut } from './geo.js';
+import { matPants, matCloth, matSkin, matGrip, matBelt, matBuckle } from './materials.js';
 import { seatCar } from './seat.js';
 
 const THREE = window.THREE;
@@ -40,3 +40,21 @@ export const torsoGrp = new THREE.Group(); // reclines with the backrest
     knee.add(at(box(106, 62, 158, matGrip), 0, -308, 74)); // foot
   });
 })();
+
+// 3-point belt — a sibling of `patient` on the seatCar, NOT a child of it, so
+// it stays with the chair (unbuckled and left behind) once the occupant
+// slides off; if it lived under `patient` it would slide off with them.
+// Runs diagonally like a real one: fixed anchor at the top-left of the
+// backrest, buckle down at the bottom-right, near the hip.
+const beltAnchor = { x: -190, y: 480, z: -180 };
+const beltBuckleAt = { x: 150, y: 40, z: 140 };
+export const beltPivot = new THREE.Group();
+at(beltPivot, beltAnchor.x, beltAnchor.y, beltAnchor.z); // hinge at the fixed backrest-top mount
+seatCar.add(beltPivot);
+const beltVec = {
+  x: beltBuckleAt.x - beltAnchor.x,
+  y: beltBuckleAt.y - beltAnchor.y,
+  z: beltBuckleAt.z - beltAnchor.z,
+};
+beltPivot.add(flatStrut({ x: 0, y: 0, z: 0 }, beltVec, matBelt, 26, 14));
+beltPivot.add(at(box(44, 40, 20, matBuckle), beltVec.x, beltVec.y, beltVec.z)); // buckle clip, at the hip end

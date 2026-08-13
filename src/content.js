@@ -27,10 +27,10 @@ export const content = {
     h2: 'Everything the chair actually does.',
     items: [
       { id: 'lift', title: 'Ease of transfer', desc: 'A telescoping column raises or lowers the entire seat to match the bed, sofa, or toilet, to the millimetre.', video: true, imgAlt: 'Video of the powered height-lift column raising the seat to meet a bed' },
-      { id: 'armrest', title: 'Grows with the person', desc: 'Cup holder, canopy, storage, tray table, IV pole: clip a new module onto the same universal rail as needs change.', imgAlt: 'Photo of clip-on modules (tray table, canopy, storage) mounted on the universal rail' },
-      { id: 'rails', title: 'Telescoping transfer rails', desc: 'The seat and backrest ride out on their own rails, bridging the gap to the target surface.', imgAlt: 'Photo of the seat and backrest extended out on telescoping transfer rails' },
-      { id: 'modular', title: 'Powered height, adjusted', desc: 'The seat rises and lowers to meet the bed, sofa, or toilet exactly.', imgAlt: 'Photo of the seat at a lowered height, level with a bed' },
-      { id: 'wheels', title: 'Wheels for the terrain', desc: 'Standard, all-terrain, or powered hub: the same chassis, fitted for how someone actually gets around.', imgAlt: 'Photo of the chair fitted with all-terrain wheels' },
+      { id: 'armrest', title: 'Transfer mechanism works with various surfaces', desc: 'Standard, all-terrain, or powered hub: the same chassis, fitted for how someone actually gets around.', video: true, imgAlt: 'Video of the transfer mechanism working across different surfaces' },
+      { id: 'rails', title: 'Powered height, adjusted', desc: 'The seat rises and lowers to meet the bed, sofa, or toilet exactly.', imgAlt: 'Photo of the seat and backrest extended out on telescoping transfer rails' },
+      { id: 'modular', title: 'Telescoping transfer rails', desc: 'The seat and backrest ride out on their own rails, bridging the gap to the target surface.', imgAlt: 'Photo of the telescoping rail assembly with quick-release clamps and a clip-on cup holder module' },
+      { id: 'wheels', title: 'Grows with the person', desc: 'Cup holder, canopy, storage, tray table, IV pole: clip a new module onto the same universal rail as needs change.', imgAlt: 'Photo of clip-on modules (tray table, canopy, storage) mounted on the universal rail' },
     ],
   },
 
@@ -96,9 +96,6 @@ export const content = {
   summary: {
     eyebrow: 'Your Chair Force',
     h2: 'This is the chair you designed.',
-    disclaimer: 'Seat width 386 mm is measured. Travel, heights, rail geometry and occupant mass are working estimates; real numbers drop straight in.',
-    priceDisclaimer: 'Figures on this page are indicative placeholders pending a costed bill of materials. Replace before publishing.',
-    cta: 'Book a consultation',
   },
 
   purchase: {
@@ -110,7 +107,7 @@ export const content = {
       label: 'Your estimated cost with SMF subsidy',
       note: 'SMF funds up to 90% of device cost.',
       eligibility: 'Singapore citizens aged 60 and above, with monthly per-capita household income of S$2,000 or less, or a residence with annual value below S$13,000. Persons with disabilities may instead apply through the Assistive Technology Fund (ATF).',
-      caveat: 'Subsidy is capped per device type, so the actual amount may be lower than 90%. Figures on this page are indicative placeholders pending a costed bill of materials. Replace before publishing.',
+      caveat: 'Subsidy is capped per device type, so the actual amount may be lower than 90%.',
     },
     partners: ['SingHealth Community Hospitals', 'SingHealth', 'SingHealth Patient Advocacy Network', 'SG Enable', 'Enabling Village'],
     footer: 'Redefining safe transfers beyond the hospital. Team AxionCare.',

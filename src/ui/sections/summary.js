@@ -77,12 +77,9 @@ export function buildSummary() {
       el('div', {}, [
         list,
         total,
-        el('p', { class: 'summary-price-note' }, c.priceDisclaimer),
       ]),
       el('div', {}, [
         subsidyBox,
-        el('p', { class: 'summary-spec-note', style: 'margin-top:20px' }, c.disclaimer),
-        el('a', { class: 'btn btn-primary', href: '#sec-purchase', style: 'margin-top:24px' }, c.cta),
       ]),
     ]),
   ]);

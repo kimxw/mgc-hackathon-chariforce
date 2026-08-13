@@ -1,9 +1,9 @@
-import { MM, P } from './constants.js';
+import { MM, P, clamp } from './constants.js';
 import { store } from '../config/store.js';
 import { solve } from './solver.js';
 import { chair, liftMid, liftInner, LIFT_TOP_FIXED } from './chassis.js';
 import { carriage, railMid, seatCar, armPivot, backPivot, seatWidthNow } from './seat.js';
-import { patient, torsoGrp, knees } from './patient.js';
+import { patient, torsoGrp, knees, beltPivot } from './patient.js';
 import { bed, bedLegs, bedHead, contact } from './surface.js';
 import { readout, syncSteps } from './readout.js';
 import { fitView } from './cameraRig.js';
@@ -36,6 +36,15 @@ export function apply() {
   // instead of passing through its edge
   const kneeAng = -84 * (Math.PI / 180) * R.p2;
   knees.forEach((k) => { k.rotation.x = kneeAng; });
+
+  // seatbelt: worn through the height-match, unbuckled early in "Open the
+  // side" — clear of the occupant well before the armrest finishes and the
+  // rails start bridging. Swings from its fixed backrest-top anchor (like a
+  // real retractable belt) and stays on the chair once they slide off.
+  const beltOff = clamp(R.p1 / 0.45, 0, 1);
+  beltPivot.rotation.y = beltOff * 100 * (Math.PI / 180);
+  beltPivot.rotation.x = beltOff * -25 * (Math.PI / 180);
+  beltPivot.visible = s.patient;
 
   // occupant: rides the seat, then slides laterally onto the surface
   patient.visible = s.patient;

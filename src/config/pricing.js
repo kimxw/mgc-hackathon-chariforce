@@ -4,7 +4,7 @@
 // Options with NO Downloads analog (cup, tray) are shown as "Included"
 // rather than assigned an invented number. Carries Downloads' own
 // disclaimer forward rather than presenting these as final costs.
-export const BASE_PRICE = 1900; // Downloads' BASE_PRICE — chassis incl. the transfer mechanism
+export const BASE_PRICE = 1000; // Downloads' BASE_PRICE — chassis incl. the transfer mechanism
 export const SUBSIDY_RATE = 0.9; // Downloads' SUBSIDY_RATE — SMF funds up to 90%
 
 const PRICE_TABLE = {
