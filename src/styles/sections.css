@@ -1,0 +1,187 @@
+.section{position:relative;padding:var(--space-section-y) 0}
+.section-tight{padding:calc(var(--space-section-y) * .6) 0}
+
+/* ---- Hero — product-photo landing layout ----
+   Opaque (background:var(--bg)) so it reads as its own flat page rather
+   than a panel floating over the live 3D chair, which only starts showing
+   through from #sec-features onward. Bold headline + single CTA on the
+   left; a photo card with floating decorative dots on the right, echoing
+   the reference landing page.
+   #sec-hero's .container drops the max-width cap that every other section
+   uses — #site-nav (nav.css) has no max-width of its own, just
+   `padding:0 var(--gutter)` on the full-width bar, so this is what makes
+   the hero card's edges land exactly under the nav's edges instead of
+   sitting inside the narrower, centered 1180px reading column. */
+/* min-height + padding:0 override .section's own clamp(72px,12vh,140px)
+   padding (base rule at the top of this file) — that padding was stacking
+   on top of the flex-centering below and, combined with a 100vh min-height
+   far taller than the card's actual content, left large empty gaps above
+   and below the card. */
+#sec-hero{min-height:min(760px,88vh);padding:0;display:flex;align-items:center;background:var(--bg)}
+#sec-hero .container{max-width:none}
+/* --hero-pad drives both the card's own padding and the negative margin
+   .hero-visual uses to bleed the photo to the card's top/right/bottom
+   edges — a plain "contain, centered, capped width" image left a big dead
+   gap between the copy and the photo. min-height gives that bleed room to
+   actually read as big rather than being squeezed to the text's height. */
+.hero-frame{--hero-pad:clamp(28px,4vw,56px);width:100%;min-height:min(640px,72vh);
+  display:grid;grid-template-columns:1fr 1.15fr;align-items:stretch;
+  gap:clamp(20px,4vw,56px);background:var(--bg-raised);border:1px solid var(--line);
+  border-radius:32px;padding:var(--hero-pad);box-shadow:0 24px 60px rgba(20,20,20,.06);
+  overflow:hidden}
+.hero-copy{max-width:64ch;align-self:center}
+.hero-copy .eyebrow{margin-bottom:16px}
+.hero-brand{font-size:clamp(40px,5.5vw,88px);font-weight:800;letter-spacing:-.03em;line-height:1;
+  margin:0 0 8px;color:var(--txt);white-space:nowrap}
+.hero-brand span{color:var(--accent)}
+.hero-tagline{font-size:clamp(22px,2.6vw,34px);font-weight:700;letter-spacing:-.01em;line-height:1.2;
+  margin:0 0 20px;color:var(--txt)}
+.hero-copy .lede{font-size:var(--fs-lede);color:var(--txt-dim);line-height:1.5;
+  margin:0 0 32px;max-width:56ch}
+.hero-actions .btn{padding:14px 26px}
+
+.hero-visual{display:flex;align-items:flex-end;justify-content:center;
+  margin:calc(-1 * var(--hero-pad)) calc(-1 * var(--hero-pad)) calc(-1 * var(--hero-pad)) 0}
+.hero-photo{width:100%;height:100%;max-width:none;object-fit:contain;object-position:bottom;
+  display:block;transform:scaleX(-1);color:var(--txt-faint);font:12px/1.4 var(--font-sans);text-align:center}
+
+@media (max-width:900px){
+  .hero-frame{grid-template-columns:1fr;min-height:0}
+  .hero-copy{max-width:none;margin:0 auto;text-align:center}
+  .hero-copy .lede{margin-left:auto;margin-right:auto}
+  .hero-visual{order:-1;height:280px;margin:calc(-1 * var(--hero-pad)) calc(-1 * var(--hero-pad)) 0}
+}
+
+/* ---- Problem ---- */
+/* fully opaque, not translucent: this section is dense text/data, and even
+   a faint 3D-scene ghost bleeding through behind it reads as visual noise
+   fighting the copy — worth losing the see-through effect here */
+#sec-problem{background:var(--bg)}
+/* No card chrome — the numbers ARE the design. A bold top rule anchors the
+   row like a table header, thin dividers separate items, and the figures
+   are blown up to editorial/data-journalism scale instead of being boxed
+   into identical little cards. */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--txt);margin:44px 0 56px}
+.stat-card{padding:30px 28px 0 0;border-left:1px solid var(--line)}
+.stat-card:first-child{border-left:0;padding-left:0}
+.stat-card .big{font:800 clamp(46px,5.4vw,78px)/1 var(--font-sans);color:var(--accent);
+  letter-spacing:-.03em;margin:0 0 14px}
+.stat-card p{font-size:13px;color:var(--txt-dim);line-height:1.5;max-width:26ch}
+.fall-short h3{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--txt-dim);margin:0 0 18px;font-weight:600}
+.options-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--txt)}
+.option-card{padding:28px 28px 6px 0;border-left:1px solid var(--line)}
+.option-card:first-child{border-left:0;padding-left:0}
+.option-num{display:block;font:800 42px/1 var(--font-sans);color:var(--line2);
+  letter-spacing:-.02em;margin:0 0 12px}
+.option-card h4{font-size:17px;margin:0 0 8px;font-weight:650}
+.option-card p{font-size:13px;color:var(--txt-dim);line-height:1.55;max-width:32ch}
+
+/* ---- Features (bento grid) ----
+   Light neutral cards, image on top, copy below — two explicit rows (2
+   cards, then 3) rather than one masonry grid, so the top row can run
+   wider than the bottom row. Images are placeholders (see features.js);
+   until real photos land, the alt text renders inside the broken-image
+   box, styled via .bento-media img so it reads as an intentional caption. */
+#sec-features{background:var(--bg)}
+.bento-grid{display:flex;flex-direction:column;gap:20px;max-width:1040px}
+.bento-row{display:grid;gap:20px}
+.bento-row-top{grid-template-columns:1.15fr .85fr}
+.bento-row-bottom{grid-template-columns:repeat(3,1fr)}
+.bento-card{background:var(--bg-raised);border:1px solid var(--line);border-radius:26px;
+  padding:14px 14px 26px;display:flex;flex-direction:column;gap:22px;
+  box-shadow:0 1px 2px rgba(20,20,20,.03);transition:.18s}
+.bento-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(20,20,20,.06)}
+.bento-media{aspect-ratio:16/11;border-radius:18px;background:var(--bg);border:1px solid var(--line);
+  overflow:hidden;display:flex;align-items:center;justify-content:center}
+.bento-media img{width:100%;height:100%;object-fit:cover;display:block;
+  color:var(--txt-faint);font:12px/1.4 var(--font-sans);text-align:center;padding:12px}
+.bento-body{text-align:center;padding:0 14px}
+.bento-body h4{font-size:16px;font-weight:800;letter-spacing:-.01em;margin:0 0 6px;color:var(--txt)}
+.bento-body p{font-size:13px;line-height:1.5;color:var(--txt-dim);margin:0 auto;max-width:32ch}
+
+@media (max-width:860px){
+  .bento-row-top,.bento-row-bottom{grid-template-columns:1fr}
+}
+
+/* ---- Phases (scroll-driven configurator, ui/phaseScroll.js) ----
+   Each phase is its own tall section so there's real scroll distance to
+   drive it — phase 1 long enough to scrub the transfer animation start to
+   finish, phases 2/3 just long enough to hold as their own "slide" before
+   handing off to the next. The actual UI (panels/timeline/bar) is
+   fixed-position chrome shared across all three — see phases-overlay. */
+/* Fine graph-paper grid, CAD-workspace style — #story sits at z-index:1,
+   above the fixed 3D canvas (z-index:0, canvas.css), so this paints over
+   the live chair render rather than the canvas painting over it; the
+   background is transparent between the lines so the chair still shows
+   through. */
+.phase-scroll{position:relative;padding:0;
+  background-image:linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size:40px 40px}
+#sec-phase1{height:340vh}
+#sec-phase2{height:150vh}
+#sec-phase3{height:150vh}
+.phases-overlay{position:relative}
+
+/* Vertical collapsible timeline, living in the left panel: one numbered
+   section per phase, badges connected by a rail line, only the active
+   section's body expanded — order-tracking style, not a top-of-screen bar. */
+.cf-acc{margin-top:18px}
+.cf-acc-section{display:flex;gap:14px}
+.cf-acc-rail{display:flex;flex-direction:column;align-items:center;flex:none}
+.cf-acc-vline{flex:1;width:1.5px;background:var(--line2);margin:6px 0;min-height:10px;transition:background .2s}
+.cf-acc-section.done .cf-acc-vline{background:var(--accent)}
+.cf-tl-badge{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line2);background:var(--bg-raised);
+  display:grid;place-items:center;font:600 13px/1 var(--font-mono);color:var(--txt-faint);transition:.15s;flex:none}
+.cf-acc-section.done .cf-tl-badge{background:var(--accent-dark);border-color:var(--accent);color:var(--accent)}
+.cf-acc-section.current .cf-tl-badge{background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 0 0 4px rgba(47,111,224,.16)}
+.cf-acc-main{flex:1;min-width:0;padding-bottom:16px}
+.cf-acc-header{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;
+  font:650 15px/1.3 var(--font-sans);color:var(--txt-faint);padding:5px 0;transition:color .15s}
+.cf-acc-section.current .cf-acc-header{color:var(--txt)}
+.cf-acc-section.done .cf-acc-header{color:var(--txt-dim)}
+.cf-acc-header:hover{color:var(--txt)}
+.cf-acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.cf-acc-section.current .cf-acc-body{max-height:2400px;margin-top:10px}
+
+/* ---- Summary ---- */
+#sec-summary{background:var(--bg)}
+/* stretch (grid's default, no align-items override) so both columns share
+   the taller one's height, then flex-column + margin-top:auto on the last
+   left-column element pushes it down to actually line up with the right
+   column's bottom instead of just leaving invisible empty space */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+.summary-grid > div{display:flex;flex-direction:column}
+.summary-list{border-top:1px solid var(--line)}
+.summary-row{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}
+.summary-row .label{color:var(--txt-dim)}
+.summary-row .price{font-variant-numeric:tabular-nums;color:var(--txt)}
+.summary-total{display:flex;justify-content:space-between;padding:20px 0 0;font-size:20px;font-weight:650}
+.summary-price-note{font-size:11px;color:var(--txt-faint);margin-top:auto;padding-top:14px;line-height:1.5}
+.summary-spec-note{font-size:11.5px;color:var(--txt-dim);margin-top:24px;padding-top:20px;border-top:1px solid var(--line);line-height:1.5}
+
+/* ---- Purchase ---- */
+#sec-purchase{background:var(--bg-raised)}
+.purchase-grid{display:grid;grid-template-columns:1fr;max-width:620px}
+.subsidy-box{border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;background:var(--bg-raised)}
+.subsidy-label{font-size:12px;color:var(--txt-dim);margin-bottom:6px}
+.subsidy-amount{font:700 34px/1 var(--font-sans);letter-spacing:-.01em}
+.subsidy-list{font-size:14px;color:var(--bad);margin-left:8px;text-decoration:line-through}
+.subsidy-sub{font-size:12px;color:var(--txt-dim);margin-top:8px}
+.subsidy-fine{font-size:11px;color:var(--txt-faint);line-height:1.6;margin-top:16px}
+.quote-form{display:flex;flex-direction:column;gap:10px;margin:24px 0 12px}
+.quote-form input{background:var(--bg-raised);border:1px solid var(--line2);border-radius:var(--radius-sm);
+  color:var(--txt);padding:13px 14px;font-size:14px;font-family:inherit}
+.quote-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.fine-print{font-size:11px;color:var(--txt-faint);line-height:1.6}
+.partners{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 40px}
+.partner-pill{font-size:11.5px;color:var(--txt-dim);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.footer-brand{font-size:14px;color:var(--txt-dim);border-top:1px solid var(--line);padding-top:24px}
+.footer-note{font-size:11px;color:var(--txt-faint);margin-top:8px}
+
+@media (max-width:860px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .options-grid{grid-template-columns:1fr}
+  .summary-grid,.purchase-grid{grid-template-columns:1fr}
+}

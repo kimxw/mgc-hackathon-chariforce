@@ -1,0 +1,132 @@
+/* Configurator chrome — generalized from the original app's #ui/#out/#cfg
+   panels into reusable classes so any phase can mount one. These are
+   position:fixed (so they never move relative to the viewport while a
+   phase section is pinned) which means they must be explicitly hidden
+   outside the phases experience, or they'd float over every later section
+   too — gated by body.phases-active, toggled by ui/phaseScroll.js. */
+.cf-panel{position:fixed;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(20,20,18,.10);z-index:5}
+
+/* :not() bumps specificity above the later, unconditional .cf-bar{display:flex}
+   etc. declarations further down this file, so this hide always wins
+   regardless of source order */
+body:not(.phases-active) .cf-panel-l,body:not(.phases-active) .cf-panel-r,
+body:not(.phases-active) .cf-viewbar,
+body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!important}
+
+/* top offset clears the fixed site nav (~64px) so panel corners don't sit
+   underneath it. left/right offsets use --gutter, same as the nav and every
+   .container-based section, so this panel's edge lines up with the rest of
+   the app instead of sitting at its own tighter fixed margin. */
+.cf-panel-l{top:80px;left:var(--gutter);width:400px;padding:22px 26px 22px;max-height:calc(100vh - 96px);overflow-y:auto}
+/* right panel sits below the view-controls toolbar, which owns the top of
+   this corner now */
+.cf-panel-r{top:198px;right:var(--gutter);width:264px;padding:14px 16px;max-height:calc(100vh - 214px);overflow-y:auto}
+.cf-panel-l::-webkit-scrollbar,.cf-panel-r::-webkit-scrollbar{width:7px}
+.cf-panel-l::-webkit-scrollbar-thumb,.cf-panel-r::-webkit-scrollbar-thumb{background:#cecbc4;border-radius:4px}
+
+/* compact top-right view-controls toolbar */
+.cf-viewbar{top:72px;right:var(--gutter);width:264px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.cf-vb-row{display:flex;gap:5px}
+.cf-viewbar .cf-btn{padding:6px 4px;font-size:10px}
+
+.cf-brand{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+.cf-brand h1{font-size:21px;margin:0;letter-spacing:-.01em;font-weight:750}
+.cf-tag{font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--accent);
+  border:1px solid rgba(47,111,224,.35);border-radius:4px;padding:2.5px 7px}
+.cf-sub{font-size:13px;color:var(--txt-dim);line-height:1.5;margin:0 0 18px}
+
+.cf-grp{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.cf-grp.first{border-top:0;margin-top:0;padding-top:0}
+.cf-panel h2{font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--txt-faint);margin:0 0 8px;font-weight:600}
+.cf-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--txt-dim);margin-bottom:5px}
+.cf-lbl b{color:var(--txt);font-weight:600;font-variant-numeric:tabular-nums}
+.cf-panel input[type=range]{width:100%;margin:0 0 11px;accent-color:var(--accent);height:16px;cursor:pointer}
+
+.cf-btns{display:flex;gap:6px;margin-bottom:8px}
+.cf-btns:last-child{margin-bottom:0}
+.cf-btn{flex:1;background:#eeede8;color:var(--txt);border:1px solid var(--line2);border-radius:var(--radius-sm);
+  padding:7px 4px;font-size:11px;cursor:pointer;transition:.12s;white-space:nowrap}
+.cf-btn:hover{background:#e5e3dc;border-color:#b9b6ad}
+.cf-btn.on{background:var(--accent-dark);border-color:#2f6fb8;color:#fff}
+
+.cf-step{display:flex;gap:11px;align-items:flex-start;padding:9px 10px;border-radius:var(--radius-sm);cursor:pointer;
+  border:1px solid transparent;transition:.14s;margin-bottom:4px}
+.cf-step:hover{background:#f0efea}
+.cf-step.act{background:rgba(47,111,224,.08);border-color:rgba(47,111,224,.3)}
+.cf-step.done .cf-num{background:var(--good);border-color:var(--good);color:#fff}
+.cf-num{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid #d2cfc6;
+  display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--txt-dim);margin-top:1px;transition:.14s}
+.cf-step.act .cf-num{background:var(--accent);border-color:var(--accent);color:#fff}
+.cf-step .t{font-size:13.5px;font-weight:600;line-height:1.3}
+.cf-step .d{font-size:11.5px;color:var(--txt-dim);line-height:1.4;margin-top:2px}
+.cf-step.act .d{color:#3f567a}
+
+.cf-row{display:flex;justify-content:space-between;gap:8px;padding:3.5px 0;font-size:11.5px}
+.cf-row span{color:var(--txt-dim)}
+.cf-row b{font-variant-numeric:tabular-nums;font-weight:600}
+.cf-phase{font-size:17px;font-weight:650;letter-spacing:-.2px;margin:1px 0 9px;color:var(--accent)}
+.cf-msg{margin-top:10px;padding:8px 10px;border-radius:var(--radius-sm);font-size:10.8px;line-height:1.45}
+.cf-msg.ok{background:rgba(26,143,84,.1);color:#146b3f;border:1px solid rgba(26,143,84,.28)}
+.cf-msg.wr{background:rgba(156,106,10,.1);color:var(--warn);border:1px solid rgba(156,106,10,.28)}
+.cf-msg.bd{background:rgba(194,58,52,.1);color:var(--bad);border:1px solid rgba(194,58,52,.28)}
+.cf-note{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);
+  font-size:9.8px;color:var(--txt-dim);line-height:1.5}
+
+.cf-opt{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:var(--radius-sm);cursor:pointer;
+  border:1px solid var(--line);background:#f5f4ef;margin-bottom:5px;transition:.13s}
+.cf-opt:hover{border-color:#c7c4bb;background:#eeede6}
+.cf-opt.on{border-color:rgba(47,111,224,.5);background:rgba(47,111,224,.08)}
+.cf-opt.disabled{cursor:default;opacity:.55}
+.cf-opt.disabled:hover{border-color:var(--line);background:#f5f4ef}
+.cf-dot{flex:none;width:9px;height:9px;border-radius:50%;background:#cac7bd;transition:.13s}
+.cf-opt.on .cf-dot{background:var(--accent);box-shadow:0 0 0 3px rgba(47,111,224,.18)}
+.cf-opt .n{font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px}
+.cf-opt .s{font-size:10px;color:var(--txt-dim);margin-top:.5px}
+.cf-badge{font:600 8.5px/1 var(--font-mono);letter-spacing:.5px;text-transform:uppercase;color:var(--txt-faint);
+  border:1px solid var(--line2);border-radius:4px;padding:2px 5px}
+
+.cf-fitted{margin-top:11px;padding-top:11px;border-top:1px solid var(--line);
+  font-size:10.5px;color:var(--txt-dim);line-height:1.5}
+.cf-fitted b{color:var(--txt)}
+
+.cf-bar{bottom:16px;left:50%;transform:translateX(-50%);padding:11px 15px;display:flex;
+  align-items:center;gap:12px;width:min(560px,calc(100vw - 32px))}
+.cf-bar .cf-btn{flex:none;min-width:74px}
+.cf-scrub{flex:1;margin:0;height:16px;accent-color:var(--accent)}
+.cf-tlbl{font-size:10.5px;color:var(--txt-dim);font-variant-numeric:tabular-nums;flex:none;min-width:36px;text-align:right}
+
+/* z-index BELOW .cf-panel (5): when a tall panel's content hits its
+   max-height and its bottom edge lands near the same bottom-left corner
+   this hint occupies, the panel's opaque background must paint over the
+   hint, not the other way around — same DOM-order bug class as before,
+   just via z-index this time instead of pad math */
+.cf-hint{position:fixed;bottom:16px;left:16px;font-size:10.5px;color:var(--txt-faint);line-height:1.5;z-index:3}
+
+body.cine .cf-chrome{opacity:0;pointer-events:none}
+.cf-chrome{transition:opacity .3s}
+.cf-cine-exit{position:fixed;top:16px;left:16px;padding:8px 13px;font-size:11px;color:var(--txt-dim);
+  background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:8px;display:none;z-index:9;
+  opacity:.35;transition:.2s}
+body.cine .cf-cine-exit{display:block}
+.cf-cine-exit:hover{opacity:1}
+
+/* Mobile: the two fixed side panels (302px + 264px) don't fit next to a
+   usable 3D view on a phone screen. Stack them at the bottom instead,
+   each capped to a fraction of viewport height with its own scroll, so
+   the model stays visible above them rather than fully obscured. */
+@media (max-width:760px){
+  .cf-panel-l,.cf-panel-r{position:fixed;left:10px;right:10px;width:auto;top:auto;
+    max-height:29vh;border-radius:14px}
+  .cf-panel-r{bottom:calc(10px + 29vh + 8px)}
+  .cf-panel-l{bottom:10px}
+  body.phases-active.mobile-has-bar .cf-panel-l{bottom:70px}
+  body.phases-active.mobile-has-bar .cf-panel-r{bottom:calc(70px + 29vh + 8px)}
+  .cf-bar{bottom:10px;padding:8px 10px}
+  .cf-hint{display:none!important}
+  /* view toolbar shrinks and drops the two rarest controls rather than
+     competing with the timeline/CTA for top-of-screen space */
+  .cf-viewbar{top:60px;width:150px;padding:7px;gap:4px}
+  .cf-viewbar .cf-btn{padding:5px 3px;font-size:9px}
+  .cf-viewbar .cf-vb-row:last-child{display:none}
+}

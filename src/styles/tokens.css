@@ -1,0 +1,36 @@
+:root{
+  /* palette — light, minimal, showroom-configurator: warm off-white pages,
+     near-black text, soft neutral borders. Matched by the 3D scene's own
+     background/lighting (engine/scene.js) so the page chrome and the 3D
+     viewport read as one product, not a dark UI over a bright render. */
+  --bg:#f7f7f5;
+  --bg-raised:#ffffff;
+  --panel:rgba(255,255,255,.88);
+  --line:#e4e2dd;
+  --line2:#cecbc4;
+  --txt:#1c1d1f;
+  --txt-dim:#6b6d70;
+  --txt-faint:#9a9b9a;
+  --accent:#2f6fe0;
+  --accent-dark:#1d4a80;
+  --good:#1a8f54;
+  --warn:#9c6a0a;
+  --bad:#c23a34;
+
+  /* type scale */
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --fs-eyebrow:11px;
+  --fs-body:16px;
+  --fs-lede:19px;
+  --fs-h2:clamp(28px,4vw,44px);
+  --fs-h1:clamp(34px,4.4vw,56px);
+
+  /* spacing */
+  --space-section-y:clamp(72px,12vh,140px);
+  --content-w:1180px;
+  --gutter:clamp(20px,5vw,64px);
+
+  --radius:12px;
+  --radius-sm:7px;
+}

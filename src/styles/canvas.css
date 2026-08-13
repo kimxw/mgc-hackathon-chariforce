@@ -1,0 +1,7 @@
+#cv{position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;outline:none;z-index:0;
+  touch-action:pan-y}
+/* while the Phases section owns the interaction (pinned/active), drag must
+   orbit the model rather than being hijacked as a page scroll */
+body.phases-active #cv{touch-action:none}
+
+#story{position:relative;z-index:1}
