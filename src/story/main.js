@@ -2,10 +2,21 @@ import { el, section } from '../ui/dom.js';
 import { buildNav } from '../ui/chrome/nav.js';
 import { story } from './content.js';
 
+function buildVideo() {
+  const s = story.testimonials;
+  // autoplay requires muted (browser policy) — controls stay on so anyone
+  // who wants sound can unmute manually. Attributes alone don't reliably
+  // autoplay a video built via createElement, so .play() is called
+  // explicitly too (same pattern as the homepage bento videos).
+  const video = el('video', { src: s.video, controls: '', autoplay: '', muted: '', loop: '', playsinline: '', preload: 'auto' });
+  video.muted = true;
+  video.play().catch(() => {});
+  return el('div', { class: 'testi-video-wrap' }, [video]);
+}
+
 function buildWhy() {
   const w = story.why;
-
-  return section('sec-why', 'story-why', [
+  return el('div', { class: 'story-why-col' }, [
     el('span', { class: 'eyebrow reveal' }, w.eyebrow),
     el('h1', { class: 'story-h1 reveal' }, w.h1),
 
@@ -16,76 +27,27 @@ function buildWhy() {
   ]);
 }
 
-function mediaPlaceholder(item) {
-  return el('div', { class: 'tl-media' }, [
-    item.media === 'video'
-      ? el('span', { class: 'tl-media-icon', html: '<svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" fill="currentColor"/></svg>' })
-      : el('span', { class: 'tl-media-icon', html: '<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" fill="currentColor"/><path d="M4 16.5l5-4.5 4 3 3-2.5 4 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' }),
-    el('span', { class: 'tl-media-alt' }, item.mediaAlt),
-  ]);
-}
-
-function buildTimeline() {
-  const t = story.timeline;
-  return section('sec-timeline', 'story-timeline', [
-    el('span', { class: 'eyebrow reveal' }, t.eyebrow),
-    el('h2', { class: 'story-h2 reveal' }, t.h2),
-    el('p', { class: 'story-lede2 reveal' }, t.lede),
-
-    el('div', { class: 'tl-rail' }, t.milestones.map((m) => el('div', { class: 'tl-row reveal' }, [
-      el('div', { class: 'tl-spine' }, [el('span', { class: 'tl-dot' })]),
-      el('div', { class: 'tl-card' }, [
-        mediaPlaceholder(m),
-        el('div', { class: 'tl-body' }, [
-          el('div', { class: 'tl-meta' }, [
-            el('span', { class: 'tl-date' }, m.date),
-            el('span', { class: 'tl-tag' }, m.tag),
-          ]),
-          el('h3', {}, m.title),
-          el('p', { class: m.desc ? '' : 'tl-desc-placeholder' }, m.desc || 'Add the real story behind this one.'),
-        ]),
-      ]),
-    ]))),
-  ]);
-}
-
-function buildTestimonials() {
-  const s = story.testimonials;
-  return section('sec-testimonials', 'story-testimonials', [
-    el('div', { class: 'testi-layout' }, [
-      el('div', { class: 'testi-intro' }, [
-        el('span', { class: 'eyebrow reveal' }, s.eyebrow),
-        el('h2', { class: 'story-h2 reveal' }, s.h2),
-        el('p', { class: 'story-lede2 reveal' }, s.lede),
-      ]),
-
-      el('div', { class: 'testi-list' }, s.cards.map((c) => el('div', { class: 'testi-card reveal' }, [
-        el('div', { class: 'testi-photo', title: c.photoAlt }, [
-          el('span', { class: 'testi-photo-icon', html: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.6" stroke="currentColor" stroke-width="1.6"/><path d="M4.8 19.2c1.4-3.4 4.1-5.1 7.2-5.1s5.8 1.7 7.2 5.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>' }),
-        ]),
-        el('div', { class: 'testi-body' }, [
-          el('div', { class: 'testi-who' }, [
-            el('strong', {}, c.name || 'Add name'),
-            c.role ? el('span', {}, c.role) : null,
-          ]),
-          el('p', { class: c.quote ? 'testi-quote' : 'testi-quote testi-quote-placeholder' }, c.quote || 'Add their testimonial here.'),
-        ]),
-      ]))),
-    ]),
-  ]);
-}
+const videoWrap = buildVideo();
+const whyCol = buildWhy();
 
 const app = document.getElementById('app');
 app.appendChild(buildNav());
 app.appendChild(el('main', { id: 'story-main' }, [
-  buildWhy(),
-  buildTimeline(),
-  buildTestimonials(),
+  section('sec-story-hero', 'story-hero', [videoWrap, whyCol]),
 ]));
 
-// Scroll reveal: fade + rise + unblur, same enter-once treatment for both
-// the narrative paragraphs and the timeline rows so the two sections read
-// as one language rather than two different techniques bolted together.
+// Match the video card's height to the text column's actual rendered
+// height (font sizes are fluid, so this can't be a fixed CSS value), then
+// let aspect-ratio (story.css) drive the video's width from there. The
+// column itself is now wide enough (story.css: .container is edge-to-edge,
+// matching the header's own margins, not capped at the page's normal
+// content width) that hitting the matched height rarely needs the
+// max-width safety cap to kick in and narrow it.
+const syncVideoHeight = () => { videoWrap.style.height = `${whyCol.offsetHeight}px`; };
+new ResizeObserver(syncVideoHeight).observe(whyCol);
+syncVideoHeight();
+
+// Scroll reveal: fade + rise + unblur, once, on first entry.
 const io = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
