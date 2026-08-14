@@ -153,16 +153,10 @@ body:not(.phases-active) .cf-next-btn{display:none!important}
 
   .cf-bar{bottom:calc(10px + env(safe-area-inset-bottom));padding:8px 10px}
   .cf-hint{display:none!important}
-  /* Full-width instead of a narrow right-anchored column: a panel that
-     touches the right edge gets read by panelRegistry.js's pad model as
-     claiming a full-height side column (it can't tell "this is only tall
-     near the top"), which was reserving ~190px of width for the ENTIRE
-     phases view just for a 150px toolbar — the single biggest reason the
-     model rendered small on mobile. Spanning left-to-right instead makes
-     it register as a top bar (only its own height reserved), and the
-     extra width happens to also fix the buttons' cramped touch targets. */
-  .cf-viewbar{top:calc(60px + env(safe-area-inset-top));left:10px;right:10px;width:auto;padding:8px;gap:6px}
-  .cf-viewbar .cf-btn{padding:10px 4px;font-size:11px}
+  /* Iso/Front/Top/Fit/Rider/Spin: a power-user toolbar that ate real
+     screen space and touch targets on a phone for options most mobile
+     visitors never touch — dropped entirely rather than squeezed in. */
+  .cf-viewbar{display:none}
 
   /* Floating "next phase" advance — scroll drives orbit on touch instead
      (cameraRig.js), so it can't double as the phase-advance gesture the
