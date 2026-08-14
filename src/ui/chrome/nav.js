@@ -25,7 +25,15 @@ export function buildNav() {
     toggle.setAttribute('aria-expanded', String(open));
     toggle.innerHTML = open ? CLOSE_ICON : MENU_ICON;
   };
-  toggle.onclick = () => setOpen(!links.classList.contains('open'));
+  // stopPropagation matters here beyond just tidiness: setOpen() below
+  // replaces the icon's innerHTML, which detaches whatever element the
+  // click actually landed on (e.g. the SVG <path> if the tap hit dead
+  // center of the icon, the natural place to tap). Without stopping it,
+  // this same click event keeps bubbling to the document listener below
+  // with a now-disconnected e.target, whose .closest('#site-nav') then
+  // wrongly returns null — read as an outside click — instantly closing
+  // the menu the same click just opened.
+  toggle.onclick = (e) => { e.stopPropagation(); setOpen(!links.classList.contains('open')); };
   // clicking a link, clicking outside, or Escape all close it — otherwise
   // it's left open over the page after navigating, or trapped open forever
   links.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
