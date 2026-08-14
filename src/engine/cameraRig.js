@@ -99,7 +99,7 @@ export function manual() {
 // is fragile; this way orbit-drag works regardless of what's in the DOM
 // above the canvas, and is only live during the phases the chair is
 // actually visible in.
-let dragging = false, panning = false, touchDrag = false, lx = 0, ly = 0;
+let dragging = false, panning = false, touchDrag = false, touchMode = null, lx = 0, ly = 0, sx = 0, sy = 0;
 function activeAndNotChrome(e) {
   return document.body.classList.contains('phases-active') && !e.target.closest('.cf-chrome');
 }
@@ -107,8 +107,8 @@ document.addEventListener('contextmenu', (e) => { if (activeAndNotChrome(e)) e.p
 document.addEventListener('pointerdown', (e) => {
   if (!activeAndNotChrome(e)) return;
   dragging = true; panning = (e.button === 2 || e.button === 1 || e.shiftKey);
-  touchDrag = e.pointerType === 'touch';
-  lx = e.clientX; ly = e.clientY;
+  touchDrag = e.pointerType === 'touch'; touchMode = null;
+  lx = e.clientX; ly = e.clientY; sx = e.clientX; sy = e.clientY;
   if (store.get().spin) store.set({ spin: false });
 });
 document.addEventListener('pointerup', () => { dragging = false; });
@@ -121,17 +121,28 @@ document.addEventListener('pointermove', (e) => {
     manual();
     const per = (2 * cam.radius * Math.tan((camera.fov * Math.PI) / 360)) / innerHeight;
     cam.panX -= dx * per; cam.panY += dy * per; updCam();
-  } else {
-    cam.theta -= dx * 0.007;
+  } else if (touchDrag) {
     // Touch has no separate scroll input the way a mouse has a wheel, so a
-    // vertical finger-drag is ambiguous: it's also how phaseScroll.js
-    // scrubs the phase-1 animation via native page scroll. Applying both at
-    // once reads as broken (the chair tilts AND the timeline scrubs off one
-    // swipe). Horizontal orbit is unambiguous — touch-action:pan-y
-    // (canvas.css) already keeps the browser from treating sideways drags
-    // as a scroll — so touch keeps that axis and leaves vertical motion to
-    // scroll/scrub, mirroring a mouse's wheel-scrubs / drag-orbits split.
-    if (!touchDrag) cam.phi -= dy * 0.007;
+    // finger-drag is ambiguous between two real gestures: orbit, and the
+    // native scroll that phaseScroll.js reads to scrub the phase-1
+    // animation. touch-action:none on the phase sections (sections.css)
+    // hands the WHOLE gesture to this handler — the browser never claims
+    // it as a scroll — so scrolling has to be driven manually here for the
+    // vertical case, via scrollBy(), which still fires the ordinary
+    // `scroll` event phaseScroll.js already listens for (nothing
+    // duplicated there). Mode locks from the first ~6px of movement so a
+    // slightly-diagonal swipe doesn't flicker between the two mid-gesture.
+    if (touchMode === null && Math.hypot(e.clientX - sx, e.clientY - sy) > 6) {
+      touchMode = Math.abs(e.clientX - sx) > Math.abs(e.clientY - sy) ? 'orbit' : 'scroll';
+    }
+    if (touchMode === 'orbit') {
+      cam.theta -= dx * 0.007;
+      if (store.get().autoFit) fitView(); else updCam();
+    } else if (touchMode === 'scroll') {
+      scrollBy(0, -dy);
+    }
+  } else {
+    cam.theta -= dx * 0.007; cam.phi -= dy * 0.007;
     if (store.get().autoFit) fitView(); else updCam();
   }
 });

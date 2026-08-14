@@ -182,6 +182,14 @@
 #sec-phase1{height:340vh}
 #sec-phase2{height:150vh}
 #sec-phase3{height:150vh}
+/* These sections (not #cv, which is usually beneath them in hit-testing)
+   are the actual element a touch lands on over the model. touch-action:
+   none hands the whole gesture to cameraRig.js's pointer handlers instead
+   of letting the browser start its own native scroll mid-drag and cancel
+   the JS one — cameraRig.js drives scrolling itself for touch (via
+   scrollBy(), still firing the normal `scroll` event) when it detects a
+   vertical-dominant drag, so phase-1 scrubbing still works from a swipe. */
+body.phases-active .phase-scroll{touch-action:none}
 .phases-overlay{position:relative}
 
 /* Vertical collapsible timeline, living in the left panel: one numbered

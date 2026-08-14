@@ -4,10 +4,10 @@
    before the address bar settles) and that inline style wins immediately. */
 #cv{position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;outline:none;z-index:0;
   touch-action:pan-y}
-/* touch-action stays pan-y even during the Phases section (not "none"):
-   cameraRig.js now splits the axes itself — horizontal drag orbits,
-   vertical drag is left to native scroll, which is what scrubs the
-   phase-1 animation (ui/phaseScroll.js). Blocking pan-y here would fight
-   that scroll wherever #cv is the actual hit target. */
+/* pan-y here is only the default outside the Phases section (plain page
+   scroll over the canvas, e.g. on the hero). During Phases, touches
+   actually land on the .phase-scroll <section> above #cv in the DOM, not
+   #cv itself — see that section's own touch-action:none in sections.css,
+   which is what actually governs orbit-vs-scroll there. */
 
 #story{position:relative;z-index:1}
