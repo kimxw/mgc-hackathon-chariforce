@@ -381,3 +381,18 @@ body.phases-active .phase-scroll{touch-action:none}
   .subsidy-amount{font-size:28px}
   .subsidy-fine{margin-top:12px}
 }
+
+/* Corner rounding, generally, reads as heavier on a phone than it does on
+   desktop — the same absolute px radius is a much bigger fraction of a
+   card's own (much smaller) width/height on a narrow screen. Scaled down
+   here rather than in each component's own rule, so desktop's proportions
+   stay exactly as designed. --radius itself (tokens.css) already cascades
+   to the smaller panel/input/badge corners; only the large hardcoded card
+   radii need calling out individually below. */
+@media (max-width:760px){
+  .hero-cover{border-radius:20px}
+  .hero-frame{border-radius:20px}
+  .bento-card{border-radius:16px}
+  .bento-media{border-radius:16px 16px 0 0}
+  .why-video-wrap{border-radius:18px}
+}
