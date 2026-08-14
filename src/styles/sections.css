@@ -41,11 +41,13 @@
    full color, no grayscale/dim-until-hover treatment. padding overrides
    .section's own clamp(72px,12vh,140px) (base rule, top of this file) —
    that's sized for a full section with a headline, way more than this
-   thin label+logos strip needs; top is trimmed harder than bottom since
-   .hero-cover (above) already leaves its own var(--gutter) gap below the
-   card before this section even starts. padding-left on the row is a
-   manual nudge — the row reads slightly left-of-center otherwise. */
-#sec-partners{background:var(--bg);padding:4px 0 28px}
+   thin label+logos strip needs; top is still trimmed well below that
+   (though not as tight as before — .hero-cover's own var(--gutter) gap
+   below the card wasn't enough breathing room on its own for the
+   OUR PARTNERS label to not read as jammed against it). padding-left on
+   the row is a manual nudge — the row reads slightly left-of-center
+   otherwise. */
+#sec-partners{background:var(--bg);padding:44px 0 28px}
 .partner-label{display:block;text-align:center;margin:0 0 20px}
 .partner-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
   gap:clamp(40px,7vw,90px);padding-left:28px}
@@ -229,22 +231,19 @@ body.phases-active .phase-scroll{touch-action:none}
 .cf-acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
 .cf-acc-section.current .cf-acc-body{max-height:2400px;margin-top:10px}
 
-/* ---- Summary + Purchase, combined ("This is the chair you designed" /
-   "Book your consultation" as one section: the designed chair's price
-   breakdown on the left, the consultation form on the right, instead of
-   two separate stacked sections. max-width:none matches #sec-why above
-   it — edge-to-edge at the same --gutter margin the header uses, instead
-   of the default .container cap (1180px, centered) most other sections
-   use, which read as an inconsistent jump in side margin between these
-   adjacent sections. ---- */
+/* ---- Summary ("This is the chair you designed") ---- */
+/* max-width:none matches #sec-why and #sec-purchase below it — all three
+   share the same edge-to-edge --gutter margin instead of jumping between
+   this and the default centered 1180px cap from one section to the next. */
 #sec-summary{background:var(--bg)}
 #sec-summary .container{max-width:none}
-.summary-purchase-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+.summary-grid > div{display:flex;flex-direction:column}
 .summary-list{border-top:1px solid var(--line)}
 .summary-row{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}
 .summary-row .label{color:var(--txt-dim)}
 .summary-row .price{font-variant-numeric:tabular-nums;color:var(--txt)}
-.summary-total{display:flex;justify-content:space-between;padding:20px 0 24px;font-size:20px;font-weight:650}
+.summary-total{display:flex;justify-content:space-between;padding:20px 0 0;font-size:20px;font-weight:650}
 
 /* ---- Why we started (ui/sections/whyStarted.js) — video + mission split
    hero, formerly its own story.html page, now folded into the normal
@@ -305,7 +304,12 @@ body.phases-active .phase-scroll{touch-action:none}
   .reveal{opacity:1;transform:none;filter:none;transition:none}
 }
 
-/* ---- Purchase (the right column of #sec-summary — see above) ---- */
+/* ---- Purchase (Book your consultation) — last section on the page.
+   max-width:none matches #sec-summary and #sec-why above it — same
+   edge-to-edge --gutter margin all the way down. ---- */
+#sec-purchase{background:var(--bg-raised)}
+#sec-purchase .container{max-width:none}
+.purchase-grid{display:grid;grid-template-columns:1fr;max-width:620px}
 .subsidy-box{border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;background:var(--bg-raised)}
 .subsidy-label{font-size:12px;color:var(--txt-dim);margin-bottom:6px}
 .subsidy-amount{font:700 34px/1 var(--font-sans);letter-spacing:-.01em}
@@ -331,7 +335,7 @@ body.phases-active .phase-scroll{touch-action:none}
 @media (max-width:860px){
   .stat-grid{grid-template-columns:repeat(2,1fr)}
   .options-grid{grid-template-columns:1fr}
-  .summary-purchase-grid{grid-template-columns:1fr}
+  .summary-grid,.purchase-grid{grid-template-columns:1fr}
 }
 
 /* narrow phones: two stat columns get tight once the 46px-min figures

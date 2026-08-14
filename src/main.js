@@ -22,8 +22,9 @@ import { buildPartners } from './ui/sections/partners.js';
 import { buildHero } from './ui/sections/hero.js';
 import { buildFeatures } from './ui/sections/features.js';
 import { buildPhasesSection } from './ui/sections/phases/index.js';
+import { buildSummary } from './ui/sections/summary.js';
 import { buildWhyStarted } from './ui/sections/whyStarted.js';
-import { buildSummaryPurchase } from './ui/sections/summaryPurchase.js';
+import { buildPurchase } from './ui/sections/purchase.js';
 import { initStoryScroll } from './ui/storyScroll.js';
 import { initPhaseScroll } from './ui/phaseScroll.js';
 
@@ -37,8 +38,9 @@ app.appendChild(el('main', { id: 'story' }, [
   buildHero(),
   buildFeatures(),
   ...phases.sectionEls,
+  buildSummary(),
   buildWhyStarted(),
-  buildSummaryPurchase(),
+  buildPurchase(),
 ]));
 
 buildWheels();
