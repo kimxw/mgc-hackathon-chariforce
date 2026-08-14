@@ -48,7 +48,7 @@ body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!
 .cf-btn{flex:1;background:#eeede8;color:var(--txt);border:1px solid var(--line2);border-radius:var(--radius-sm);
   padding:7px 4px;font-size:11px;cursor:pointer;transition:.12s;white-space:nowrap}
 .cf-btn:hover{background:#e5e3dc;border-color:#b9b6ad}
-.cf-btn.on{background:var(--accent-dark);border-color:#000;color:#fff}
+.cf-btn.on{background:var(--accent-dark);border-color:var(--accent-dark);color:#fff}
 
 .cf-step{display:flex;gap:11px;align-items:flex-start;padding:9px 10px;border-radius:var(--radius-sm);cursor:pointer;
   border:1px solid transparent;transition:.14s;margin-bottom:4px}

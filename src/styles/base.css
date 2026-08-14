@@ -4,7 +4,7 @@ html,body{margin:0;background:var(--bg);color:var(--txt);
   font:var(--fs-body)/1.5 var(--font-sans);-webkit-font-smoothing:antialiased}
 body{min-height:100%}
 
-::selection{background:rgba(20,20,20,.2)}
+::selection{background:rgba(36,30,26,.2)}
 
 a{color:inherit}
 

@@ -10,7 +10,7 @@ const CHEVRON = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 9l7 7 7-7" str
 export function buildHeroCover() {
   return section('sec-hero-cover', '', [
     el('div', { class: 'hero-cover' }, [
-      el('img', { src: '/img/hero/cover.jpg', alt: 'Chair Force wheelchair displayed with its modular accessories — umbrella mount, cup holder, all-terrain wheels, storage case' }),
+      el('img', { src: '/img/hero/cover.png', alt: 'Chair Force wordmark behind a photo of the wheelchair, with the Axion Care sub-brand' }),
       el('div', { class: 'hero-cover-cue' }, [
         el('span', { class: 'hero-cover-cue-chev', html: CHEVRON }),
         el('span', {}, 'Explore more'),

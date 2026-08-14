@@ -8,11 +8,17 @@
   --panel:rgba(255,255,255,.88);
   --line:#e4e2dd;
   --line2:#cecbc4;
-  --txt:#1c1d1f;
-  --txt-dim:#6b6d70;
-  --txt-faint:#9a9b9a;
-  --accent:#1c1d1f;
-  --accent-dark:#000000;
+  /* warmed to a near-black brown (same hue family as --accent below) instead
+     of a neutral near-black, so headings and the primary button — both
+     driven by --txt — read as part of the same warm palette as the hero
+     photo, not a mismatched cool black on a warm page. */
+  --txt:#241e1a;
+  --txt-dim:#6e645b;
+  --txt-faint:#9c9188;
+  /* warm coffee/umber — sampled from the hero cover photo's taupe gradient,
+     darkened enough to still clear AA contrast for white-on-accent badges */
+  --accent:#5b4a3c;
+  --accent-dark:#3d3229;
   --good:#1a8f54;
   --warn:#9c6a0a;
   --bad:#c23a34;
