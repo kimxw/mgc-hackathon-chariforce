@@ -4,11 +4,14 @@ import { view } from '../engine/cameraRig.js';
 // Per-section establishing camera angle — a soft waypoint layered over the
 // manual orbit state, same relationship autoFit already has to manual drag:
 // only steers the camera if the user hasn't taken manual control.
+// 'sec-purchase' used to have its own waypoint here, back when it was a
+// separate top-level section — now it's just an inner div's id inside
+// 'sec-summary' (ui/sections/summaryPurchase.js), combined into one
+// section this observer only ever sees enter/exit once.
 const WAYPOINTS = {
   'sec-hero': [-0.42, 1.05],
   'sec-features': [0.25, 1.1],
   'sec-summary': [-0.42, 1.02],
-  'sec-purchase': [-0.1, 1.2],
 };
 
 // The three phase sections are handled entirely by ui/phaseScroll.js

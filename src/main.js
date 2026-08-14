@@ -22,8 +22,8 @@ import { buildPartners } from './ui/sections/partners.js';
 import { buildHero } from './ui/sections/hero.js';
 import { buildFeatures } from './ui/sections/features.js';
 import { buildPhasesSection } from './ui/sections/phases/index.js';
-import { buildSummary } from './ui/sections/summary.js';
-import { buildPurchase } from './ui/sections/purchase.js';
+import { buildWhyStarted } from './ui/sections/whyStarted.js';
+import { buildSummaryPurchase } from './ui/sections/summaryPurchase.js';
 import { initStoryScroll } from './ui/storyScroll.js';
 import { initPhaseScroll } from './ui/phaseScroll.js';
 
@@ -37,8 +37,8 @@ app.appendChild(el('main', { id: 'story' }, [
   buildHero(),
   buildFeatures(),
   ...phases.sectionEls,
-  buildSummary(),
-  buildPurchase(),
+  buildWhyStarted(),
+  buildSummaryPurchase(),
 ]));
 
 buildWheels();
@@ -57,3 +57,14 @@ apply();
 initStoryScroll();
 initPhaseScroll(phases.setPhase);
 requestAnimationFrame(tick);
+
+// Scroll reveal for .reveal elements (currently just "Why we started"):
+// fade + rise + unblur, once, on first entry.
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('in-view');
+    revealIO.unobserve(entry.target);
+  });
+}, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.reveal').forEach((elm) => revealIO.observe(elm));

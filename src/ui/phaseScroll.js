@@ -21,14 +21,16 @@ export function initPhaseScroll(setPhase) {
     const vh = innerHeight;
     const start = s1.offsetTop, end = s3.offsetTop + s3.offsetHeight;
     const ref = scrollY + vh * 0.5; // viewport midpoint decides which phase is "active"
-    // the fixed overlay's on/off boundary uses the viewport TOP, not the
-    // midpoint — midpoint activation meant the overlay (opaque-ish panels
-    // over the whole screen) switched on half a viewport-height before the
-    // previous section had actually scrolled out of view, so its tail end
-    // was still visible underneath the panels. Top-aligned, it only
-    // switches on once #sec-features (or whatever precedes phase 1) is
-    // fully gone, and off once phase 3 itself is fully gone.
-    const within = scrollY >= start && scrollY < end;
+    // the fixed overlay's on/off boundary requires the WHOLE viewport (top
+    // AND bottom) to sit inside [start, end], not just the top — checking
+    // only the top fixed the entry side (previous section lingering above
+    // the panels) but left the exit side open: with `scrollY < end` alone,
+    // phases-active stays true right up until the viewport's TOP reaches
+    // `end`, by which point its BOTTOM has already been showing up to a
+    // full viewport-height of the next section (Summary) peeking in
+    // underneath the still-visible panels. Requiring the bottom edge
+    // (scrollY + vh) to also clear `end` closes that gap on both sides.
+    const within = scrollY >= start && (scrollY + vh) <= end;
     document.body.classList.toggle('phases-active', within);
     if (!within) { entered = false; return; }
 

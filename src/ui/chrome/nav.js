@@ -1,16 +1,11 @@
 import { el } from '../dom.js';
 import { registerPad } from '../../engine/panelRegistry.js';
 
-// Absolute (leading-slash) hrefs so this exact nav works unmodified from
-// any page, not just the homepage: '/#sec-features' resolves to a same-
-// document anchor scroll when already on '/', and a normal navigate-then-
-// scroll from anywhere else (e.g. story.html) — a bare '#sec-features'
-// would only work on the homepage.
 const LINKS = [
-  ['Why we started', '/story.html'],
-  ['Explore', '/#sec-features'],
-  ['Build', '/#sec-phase1'],
-  ['Purchase', '/#sec-purchase'],
+  ['Explore', '#sec-features'],
+  ['Build', '#sec-phase1'],
+  ['Why we started', '#sec-why'],
+  ['Purchase', '#sec-purchase'],
 ];
 
 const MENU_ICON = '<svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';

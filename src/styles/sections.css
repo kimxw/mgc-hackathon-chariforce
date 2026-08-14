@@ -54,6 +54,20 @@
 .partner-logo-lg{height:84px}
 .partner-logo-text{font:800 32px/1 var(--font-sans);letter-spacing:-.01em;color:#8dc63f}
 
+@media (max-width:600px){
+  /* the desktop gap (clamp floor 40px) and padding-left nudge were tuned
+     for a single wide row — wrapped to two narrow rows on a phone, that
+     same 40px gap applies as ROW spacing too, on top of the tallest
+     (84px) logo's own height, reading as a much bigger dead gap between
+     rows than the row content itself justifies. Smaller, shrunk logos
+     and no centering nudge (irrelevant once every row is already
+     centered by flex-wrap on a narrow track). */
+  .partner-row{gap:20px 28px;padding-left:0}
+  .partner-logo{height:36px}
+  .partner-logo-lg{height:50px}
+  .partner-logo-text{font-size:22px}
+}
+
 /* ---- Hero — product-photo landing layout ----
    Opaque (background:var(--bg)) so it reads as its own flat page rather
    than a panel floating over the live 3D chair, which only starts showing
@@ -215,25 +229,83 @@ body.phases-active .phase-scroll{touch-action:none}
 .cf-acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
 .cf-acc-section.current .cf-acc-body{max-height:2400px;margin-top:10px}
 
-/* ---- Summary ---- */
+/* ---- Summary + Purchase, combined ("This is the chair you designed" /
+   "Book your consultation" as one section: the designed chair's price
+   breakdown on the left, the consultation form on the right, instead of
+   two separate stacked sections. max-width:none matches #sec-why above
+   it — edge-to-edge at the same --gutter margin the header uses, instead
+   of the default .container cap (1180px, centered) most other sections
+   use, which read as an inconsistent jump in side margin between these
+   adjacent sections. ---- */
 #sec-summary{background:var(--bg)}
-/* stretch (grid's default, no align-items override) so both columns share
-   the taller one's height, then flex-column + margin-top:auto on the last
-   left-column element pushes it down to actually line up with the right
-   column's bottom instead of just leaving invisible empty space */
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
-.summary-grid > div{display:flex;flex-direction:column}
+#sec-summary .container{max-width:none}
+.summary-purchase-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
 .summary-list{border-top:1px solid var(--line)}
 .summary-row{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}
 .summary-row .label{color:var(--txt-dim)}
 .summary-row .price{font-variant-numeric:tabular-nums;color:var(--txt)}
-.summary-total{display:flex;justify-content:space-between;padding:20px 0 0;font-size:20px;font-weight:650}
-.summary-price-note{font-size:11px;color:var(--txt-faint);margin-top:auto;padding-top:14px;line-height:1.5}
-.summary-spec-note{font-size:11.5px;color:var(--txt-dim);margin-top:24px;padding-top:20px;border-top:1px solid var(--line);line-height:1.5}
+.summary-total{display:flex;justify-content:space-between;padding:20px 0 24px;font-size:20px;font-weight:650}
 
-/* ---- Purchase ---- */
-#sec-purchase{background:var(--bg-raised)}
-.purchase-grid{display:grid;grid-template-columns:1fr;max-width:620px}
+/* ---- Why we started (ui/sections/whyStarted.js) — video + mission split
+   hero, formerly its own story.html page, now folded into the normal
+   scroll instead. Two things both need to be true at once, which is why
+   this is two separate overrides:
+     1. Same height on both columns — done in JS (whyStarted.js), since
+        the text column's height is fluid and can't be a fixed CSS value.
+     2. The video wide enough to not look squeezed at that matched height
+        — .container is uncapped here (max-width:none) instead of the
+        page's normal max-width:1180px, so it runs edge-to-edge at the
+        same --gutter margins the header itself uses, giving the video
+        column real room to reach a tall matched height without its
+        aspect-ratio forcing a narrow, near-square box.
+   Below 900px they stack (video on top, back to a plain full-width 16/9
+   — there's no second column to match height to there). */
+#sec-why{background:
+  radial-gradient(120% 70% at 85% 0%,rgba(91,74,60,.08),transparent 60%),var(--bg)}
+.why-hero{min-height:min(680px,82vh);display:flex;align-items:center}
+/* the actual grid: section()'s helper (ui/dom.js) wraps every section's
+   children in an inner .container div, so the two columns passed to
+   buildWhyStarted() land there — grid on the section itself would only
+   ever see that single .container as its one child and do nothing. */
+.why-hero .container{max-width:none;display:grid;grid-template-columns:1.4fr 1fr;align-items:center;gap:56px}
+
+.why-video-wrap{max-width:100%;aspect-ratio:16/9;
+  border-radius:28px;overflow:hidden;background:#000;box-shadow:0 24px 60px rgba(20,20,20,.14)}
+.why-video-wrap video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
+
+.why-col{display:flex;flex-direction:column;justify-content:center}
+.why-h1{font:800 clamp(32px,4vw,64px)/1.06 var(--font-sans);letter-spacing:-.02em;
+  max-width:14ch;margin:0 0 36px;color:var(--txt)}
+
+/* Big numbers instead of a sentence carrying them — same "the figures ARE
+   the design" language as the homepage's own stat row (.stat-grid above),
+   so the two big facts read at a glance instead of needing to be read. */
+.why-stats{display:flex;flex-wrap:wrap;gap:32px 44px;margin:0}
+.why-stat-big{display:block;font:800 clamp(38px,4.4vw,58px)/1 var(--font-sans);
+  color:var(--accent);letter-spacing:-.03em}
+.why-stat-label{display:block;font:700 clamp(15px,1.5vw,18px)/1.35 var(--font-sans);
+  color:var(--txt);max-width:16ch;margin-top:10px}
+
+@media (max-width:900px){
+  .why-hero{min-height:0}
+  .why-hero .container{grid-template-columns:1fr;gap:32px}
+  /* !important overrides the JS-set inline height (whyStarted.js) — that
+     height-match only makes sense next to the text column; stacked, the
+     video should just be a plain full-width 16/9 like anywhere else. */
+  .why-video-wrap{height:auto!important;max-width:none}
+}
+
+/* ---- Scroll reveal — fade + rise + unblur, once, on first entry
+   (main.js's IntersectionObserver adds .in-view; this is just the
+   before/after states it toggles between). ---- */
+.reveal{opacity:0;transform:translateY(22px);filter:blur(6px);
+  transition:opacity .7s ease,transform .7s ease,filter .7s ease}
+.reveal.in-view{opacity:1;transform:translateY(0);filter:blur(0)}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;filter:none;transition:none}
+}
+
+/* ---- Purchase (the right column of #sec-summary — see above) ---- */
 .subsidy-box{border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;background:var(--bg-raised)}
 .subsidy-label{font-size:12px;color:var(--txt-dim);margin-bottom:6px}
 .subsidy-amount{font:700 34px/1 var(--font-sans);letter-spacing:-.01em}
@@ -259,7 +331,7 @@ body.phases-active .phase-scroll{touch-action:none}
 @media (max-width:860px){
   .stat-grid{grid-template-columns:repeat(2,1fr)}
   .options-grid{grid-template-columns:1fr}
-  .summary-grid,.purchase-grid{grid-template-columns:1fr}
+  .summary-purchase-grid{grid-template-columns:1fr}
 }
 
 /* narrow phones: two stat columns get tight once the 46px-min figures

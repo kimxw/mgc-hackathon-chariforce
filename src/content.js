@@ -98,6 +98,14 @@ export const content = {
     h2: 'This is the chair you designed.',
   },
 
+  // "Why we started" split hero — video left, mission/stats right. Stats
+  // are the SAME two figures already in problem.stats above, not retyped.
+  why: {
+    eyebrow: 'Why we started',
+    h1: "A transfer shouldn't be the most dangerous part of someone's day.",
+    video: '/video/testimonials.mp4',
+  },
+
   purchase: {
     eyebrow: 'Get started',
     h2: 'Book your consultation',

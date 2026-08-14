@@ -1,4 +1,4 @@
-import { el, section } from '../dom.js';
+import { el } from '../dom.js';
 import { content } from '../../content.js';
 import { store } from '../../config/store.js';
 import { priceLineItems, totalPrice, BASE_PRICE, SUBSIDY_RATE } from '../../config/pricing.js';
@@ -9,7 +9,10 @@ function labelFor(axis, id) {
   return row ? row[1] : id;
 }
 
-export function buildSummary() {
+// Returns the inner "chair you designed" column only — no <section>
+// wrapper of its own, since it's now the left half of one combined
+// section with buildPurchaseColumn() (ui/sections/summaryPurchase.js).
+export function buildSummaryColumn() {
   const c = content.summary;
   const list = el('div', { class: 'summary-list' });
   const total = el('div', { class: 'summary-total' });
@@ -70,17 +73,14 @@ export function buildSummary() {
     ]),
   ]);
 
-  return section('sec-summary', '', [
+  // Stacked (price list, then subsidy box), not the old side-by-side
+  // summary-grid — that split was sized for a full-width section; this
+  // column is now only half that width, next to buildPurchaseColumn().
+  return el('div', { class: 'summary-col' }, [
     el('span', { class: 'eyebrow' }, c.eyebrow),
-    el('h2', { style: 'font-size:var(--fs-h2);margin-bottom:44px' }, c.h2),
-    el('div', { class: 'summary-grid' }, [
-      el('div', {}, [
-        list,
-        total,
-      ]),
-      el('div', {}, [
-        subsidyBox,
-      ]),
-    ]),
+    el('h2', { style: 'font-size:var(--fs-h2);margin-bottom:32px' }, c.h2),
+    list,
+    total,
+    subsidyBox,
   ]);
 }
