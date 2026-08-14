@@ -11,18 +11,10 @@ export const story = {
   why: {
     eyebrow: 'Why we started',
     h1: "A transfer shouldn't be the most dangerous part of someone's day.",
-    personas: siteContent.hero.personas,
-    personaLede: "don't have much in common medically: cerebral palsy, spinal muscular atrophy, a cancer diagnosis. What they share is the same daily risk: getting from the chair to the bed, and back, without a fall.",
-    // split around the two figures so main.js can render them large/bold
-    // inline, instead of them getting lost in a run of body-size prose
-    statLine: {
-      num1: siteContent.problem.stats[0].big,
-      mid: ' times a day, someone is lifted, slid, or hoisted by another person who was never trained to do it safely;',
-      num2: siteContent.problem.stats[2].big,
-      after: " of family caregivers haven't been.",
-    },
-    fallShort: siteContent.problem.fallShort,
-    closing: siteContent.innovation.body,
+    stats: [
+      { big: siteContent.problem.stats[0].big, label: 'transfers a day, by someone untrained to do it safely' },
+      { big: siteContent.problem.stats[2].big, label: 'of family caregivers are among them' },
+    ],
   },
 
   timeline: {

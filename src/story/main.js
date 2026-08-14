@@ -4,32 +4,15 @@ import { story } from './content.js';
 
 function buildWhy() {
   const w = story.why;
-  const personaNames = w.personas.map((p) => p.name).join(', ').replace(/, ([^,]*)$/, ' and $1');
 
   return section('sec-why', 'story-why', [
     el('span', { class: 'eyebrow reveal' }, w.eyebrow),
     el('h1', { class: 'story-h1 reveal' }, w.h1),
 
-    el('div', { class: 'story-personas reveal' }, [
-      ...w.personas.map((p) => el('div', { class: 'story-persona' }, [
-        el('span', { class: 'story-persona-initial' }, p.initial),
-        el('span', {}, [el('strong', {}, p.name), `: ${p.desc}`]),
-      ])),
-    ]),
-    el('p', { class: 'story-lede reveal' }, [
-      el('strong', {}, personaNames), ` ${w.personaLede}`,
-    ]),
-
-    el('p', { class: 'story-p story-stat-line reveal' }, [
-      el('strong', { class: 'story-num' }, w.statLine.num1), w.statLine.mid,
-      el('strong', { class: 'story-num' }, w.statLine.num2), w.statLine.after,
-    ]),
-
-    el('div', { class: 'story-fallshort reveal' }, w.fallShort.map((f) => el('div', { class: 'story-fallshort-item' }, [
-      el('strong', {}, f.name), el('span', {}, f.desc),
+    el('div', { class: 'story-stats reveal' }, w.stats.map((s) => el('div', { class: 'story-stat' }, [
+      el('span', { class: 'story-stat-big' }, s.big),
+      el('span', { class: 'story-stat-label' }, s.label),
     ]))),
-
-    el('p', { class: 'story-closing reveal' }, w.closing),
   ]);
 }
 

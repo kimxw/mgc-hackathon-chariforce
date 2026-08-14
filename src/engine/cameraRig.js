@@ -69,13 +69,14 @@ export function fitView() {
     cam.radius = Math.max(_radius * 1.22, Math.min(40, cam.radius * k));
     updCam();
   }
-  // On phone-width viewports, the strict "fit everything inside every
-  // panel's padding" contain fit reads as small — a product configurator's
-  // hero shot should read as deliberately close, not as "whatever fits
-  // around the chrome." panX/panY are already fixed absolute world-space
+  // On phone-width viewports, nudge in slightly closer than the strict
+  // "fit everything inside every panel's padding" contain fit — that fit
+  // is already fairly tight, so this is a small deliberate push, not a
+  // rescue (0.5 here previously cropped the chair off-frame — needs to
+  // stay modest). panX/panY are already fixed absolute world-space
   // offsets from the convergence above, so tightening radius afterward
   // just zooms in on the same framing rather than needing to re-solve it.
-  if (innerWidth < 760) { cam.radius *= 0.5; updCam(); }
+  if (innerWidth < 760) { cam.radius *= 0.85; updCam(); }
 }
 
 export function updCam() {
