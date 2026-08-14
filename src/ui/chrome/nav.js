@@ -42,7 +42,6 @@ export function buildNav() {
   const nav = el('nav', { id: 'site-nav', class: 'cf-chrome' }, [
     el('a', { class: 'nav-logo', href: '/' }, 'AxionCare'),
     links,
-    el('a', { class: 'nav-cta', href: '/#sec-phase1' }, 'Build your chair'),
     toggle,
   ]);
   registerPad(nav);

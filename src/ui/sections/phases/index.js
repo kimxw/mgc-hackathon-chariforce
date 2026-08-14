@@ -144,6 +144,20 @@ export function buildPhasesSection() {
   }
   syncPanelPads();
   panelMQ.addEventListener('change', syncPanelPads);
+  // Mobile-only "next phase" advance — scroll drives orbit there instead
+  // (cameraRig.js), so it can't reliably double as the phase-to-phase
+  // scrub/advance gesture the way it does with a mouse+wheel on desktop.
+  // This gives touch a guaranteed way to move on regardless of how that
+  // gesture-disambiguation behaves on any given device.
+  const NEXT_TARGET = { 1: 'sec-phase2', 2: 'sec-phase3', 3: 'sec-summary' };
+  const DOWN_CHEV = '<svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const nextBtn = el('button', {
+    class: 'cf-panel cf-next-btn cf-chrome', type: 'button', 'aria-label': 'Next phase', title: 'Next phase',
+  }, ['Next phase', el('span', { class: 'cf-next-btn-icon', html: DOWN_CHEV })]);
+  nextBtn.onclick = () => {
+    document.getElementById(NEXT_TARGET[store.get().phase])?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const hint = el('div', { class: 'cf-hint cf-chrome' }, [
     'scroll to play it out · drag orbit · shift-drag pan · ',
     el('b', {}, 'space'),
@@ -195,7 +209,7 @@ export function buildPhasesSection() {
   // The overlay (panels/bar/hint) is fixed-position chrome, shown or hidden
   // by phaseScroll.js via body.phases-active — it doesn't need to live
   // "inside" any one phase section, so it's just parked in phase 1's.
-  const overlay = el('div', { class: 'phases-overlay' }, [mobileSheet, viewBar, barSlot, hint]);
+  const overlay = el('div', { class: 'phases-overlay' }, [mobileSheet, viewBar, barSlot, hint, nextBtn]);
 
   // Three separate scroll-length sections, IKEA-configurator style: phase 1
   // is tall enough that scrolling through it scrubs the transfer animation
@@ -207,6 +221,7 @@ export function buildPhasesSection() {
 
   registerPad(viewBar);
   registerPad(p1.barContent); // the actual fixed-position bar, not its (zero-size) wrapper
+  registerPad(nextBtn);
 
   return { sectionEls: [phase1El, phase2El, phase3El], setPhase };
 }
