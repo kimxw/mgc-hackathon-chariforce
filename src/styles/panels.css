@@ -13,7 +13,7 @@
 body:not(.phases-active) .cf-panel-l,body:not(.phases-active) .cf-panel-r,
 body:not(.phases-active) .cf-viewbar,body:not(.phases-active) .mobile-sheet,
 body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint,
-body:not(.phases-active) .cf-next-btn{display:none!important}
+body:not(.phases-active) .cf-next-btn,body:not(.phases-active) .cf-prev-btn{display:none!important}
 
 /* top offset clears the fixed site nav (~64px) so panel corners don't sit
    underneath it. left/right offsets use --gutter, same as the nav and every
@@ -116,7 +116,7 @@ body:not(.phases-active) .cf-next-btn{display:none!important}
    default-hidden base rule rather than relying solely on the media query
    to keep it out of desktop's layout. */
 .sheet-handle{display:none}
-.cf-next-btn{display:none}
+.cf-next-btn,.cf-prev-btn{display:none}
 
 /* Mobile: stacking the two corner panels at fixed heights left the 3D
    model a sliver at the top of a phone screen — the model, not the
@@ -158,16 +158,19 @@ body:not(.phases-active) .cf-next-btn{display:none!important}
      visitors never touch — dropped entirely rather than squeezed in. */
   .cf-viewbar{display:none}
 
-  /* Floating "next phase" advance — scroll drives orbit on touch instead
-     (cameraRig.js), so it can't double as the phase-advance gesture the
-     way mouse+wheel does on desktop. An explicit labeled pill rather than
-     just an icon, so its purpose reads without guessing. Sits just above
-     the sheet, and above the bar too when phase 1's Play/Reset/scrub bar
-     is also present. */
-  .cf-next-btn{display:flex;align-items:center;justify-content:center;gap:8px;
-    right:16px;bottom:calc(70px + env(safe-area-inset-bottom));
+  /* Floating "next/previous phase" advance — scroll drives orbit on touch
+     instead (cameraRig.js), so it can't double as the phase-advance
+     gesture the way mouse+wheel does on desktop. Explicit labeled pills
+     rather than just icons, so their purpose reads without guessing.
+     Opposite bottom corners; sit just above the sheet, and above the bar
+     too when phase 1's Play/Reset/scrub bar is also present. */
+  .cf-next-btn,.cf-prev-btn{display:flex;align-items:center;justify-content:center;gap:8px;
+    bottom:calc(70px + env(safe-area-inset-bottom));
     height:44px;padding:0 20px;border-radius:999px;cursor:pointer;color:var(--bg);
     background:var(--txt);border-color:var(--txt);font:700 13px/1 var(--font-sans)}
+  .cf-next-btn{right:16px}
+  .cf-prev-btn{left:16px}
   .cf-next-btn-icon{width:16px;height:16px;flex:none}
-  body.phases-active.mobile-has-bar .cf-next-btn{bottom:calc(126px + env(safe-area-inset-bottom))}
+  body.phases-active.mobile-has-bar .cf-next-btn,body.phases-active.mobile-has-bar .cf-prev-btn{
+    bottom:calc(126px + env(safe-area-inset-bottom))}
 }

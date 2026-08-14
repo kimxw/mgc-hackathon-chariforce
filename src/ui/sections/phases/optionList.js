@@ -1,4 +1,5 @@
 import { el } from '../../dom.js';
+import posthog from '../../../posthog.js';
 
 // Renders a list of [id, name, desc] options as visual swatch cards —
 // single-select (radio-like, `group` in store.cfg) or multi-select
@@ -14,7 +15,10 @@ export function renderOptionList({ list, isSelected, onSelect }) {
         el('div', { class: 'cf-dot' }),
         el('div', {}, [el('div', { class: 'n' }, name), el('div', { class: 's' }, desc)]),
       ]);
-      opt.onclick = () => { onSelect(id); render(); };
+      opt.onclick = () => {
+        posthog.capture('configuration_option_selected', { option_id: id, selected: !on });
+        onSelect(id); render();
+      };
       host.appendChild(opt);
     });
   }

@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# local env vars (VITE_POSTHOG_KEY etc.) — set the real values in the
+# hosting platform's env settings for production; .env.example documents
+# which keys are needed without the values
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -159,12 +159,23 @@ export function buildPhasesSection() {
   // This gives touch a guaranteed way to move on regardless of how that
   // gesture-disambiguation behaves on any given device.
   const NEXT_TARGET = { 1: 'sec-phase2', 2: 'sec-phase3', 3: 'sec-summary' };
+  const PREV_TARGET = { 1: 'sec-features', 2: 'sec-phase1', 3: 'sec-phase2' };
   const DOWN_CHEV = '<svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const UP_CHEV = '<svg viewBox="0 0 24 24" fill="none"><path d="M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const nextBtn = el('button', {
-    class: 'cf-panel cf-next-btn cf-chrome', type: 'button', 'aria-label': 'Next phase', title: 'Next phase',
-  }, ['Next phase', el('span', { class: 'cf-next-btn-icon', html: DOWN_CHEV })]);
+    class: 'cf-panel cf-next-btn cf-chrome', type: 'button', 'aria-label': 'Next', title: 'Next',
+  }, ['Next', el('span', { class: 'cf-next-btn-icon', html: DOWN_CHEV })]);
   nextBtn.onclick = () => {
     document.getElementById(NEXT_TARGET[store.get().phase])?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  // Mirrors nextBtn — same reasoning, opposite corner and direction. Phase
+  // 1's target (sec-features) steps back out of the configurator entirely,
+  // same as phase 3's "next" (sec-summary) steps forward out of it.
+  const prevBtn = el('button', {
+    class: 'cf-panel cf-prev-btn cf-chrome', type: 'button', 'aria-label': 'Previous', title: 'Previous',
+  }, [el('span', { class: 'cf-next-btn-icon', html: UP_CHEV }), 'Previous']);
+  prevBtn.onclick = () => {
+    document.getElementById(PREV_TARGET[store.get().phase])?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const hint = el('div', { class: 'cf-hint cf-chrome' }, [
@@ -218,7 +229,7 @@ export function buildPhasesSection() {
   // The overlay (panels/bar/hint) is fixed-position chrome, shown or hidden
   // by phaseScroll.js via body.phases-active — it doesn't need to live
   // "inside" any one phase section, so it's just parked in phase 1's.
-  const overlay = el('div', { class: 'phases-overlay' }, [mobileSheet, viewBar, barSlot, hint, nextBtn]);
+  const overlay = el('div', { class: 'phases-overlay' }, [mobileSheet, viewBar, barSlot, hint, prevBtn, nextBtn]);
 
   // Three separate scroll-length sections, IKEA-configurator style: phase 1
   // is tall enough that scrolling through it scrubs the transfer animation

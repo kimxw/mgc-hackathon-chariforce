@@ -4,6 +4,7 @@ import { store } from '../../../config/store.js';
 import { TOTAL, PHASES } from '../../../engine/constants.js';
 import { apply } from '../../../engine/apply.js';
 import { setPlay, syncScrub } from '../../../engine/playback.js';
+import posthog from '../../../posthog.js';
 
 export function buildPhase1() {
   const c = content.phase1;
@@ -18,6 +19,7 @@ export function buildPhase1() {
       row.onclick = () => {
         let acc = 0; for (let k = 0; k < i; k++) acc += PHASES[k].dur;
         store.set({ t: acc + PHASES[i].dur }); // jump to the END of that step
+        posthog.capture('transfer_step_selected', { step_number: s.n });
         setPlay(false); syncScrub(); apply();
       };
       return row;
@@ -46,9 +48,17 @@ export function buildPhase1() {
 
   // ---- bottom bar: play/reset/scrub ----
   const playBtn = el('button', { class: 'cf-btn', id: 'bPlay' }, '▶ Play');
-  playBtn.onclick = () => { if (store.get().t >= TOTAL - 0.01) store.set({ t: 0 }); setPlay(!store.get().playing); };
+  playBtn.onclick = () => {
+    if (store.get().t >= TOTAL - 0.01) store.set({ t: 0 });
+    const playing = !store.get().playing;
+    posthog.capture('transfer_playback_toggled', { playing });
+    setPlay(playing);
+  };
   const resetBtn = el('button', { class: 'cf-btn', id: 'bReset', style: 'min-width:62px' }, 'Reset');
-  resetBtn.onclick = () => { store.set({ t: 0 }); setPlay(false); syncScrub(); apply(); };
+  resetBtn.onclick = () => {
+    posthog.capture('transfer_reset');
+    store.set({ t: 0 }); setPlay(false); syncScrub(); apply();
+  };
   const scrub = el('input', { type: 'range', class: 'cf-scrub', id: 'scrub', min: '0', max: '1000', value: '0' });
   scrub.oninput = () => { store.set({ t: (+scrub.value / 1000) * TOTAL }); setPlay(false); apply(); syncScrub(); };
   const tlbl = el('div', { class: 'cf-tlbl', id: 'tlbl' }, '0.0s');

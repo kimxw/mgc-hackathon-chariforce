@@ -3,6 +3,7 @@ import { content } from '../../content.js';
 import { store } from '../../config/store.js';
 import { setXray } from '../../engine/xray.js';
 import { apply } from '../../engine/apply.js';
+import posthog from '../../posthog.js';
 
 export function buildTechnology() {
   const c = content.technology;
@@ -12,6 +13,7 @@ export function buildTechnology() {
   };
   xrayBtn.addEventListener('click', () => {
     store.set({ xray: !store.get().xray });
+    posthog.capture('xray_view_toggled', { enabled: store.get().xray });
     setXray(store.get().xray);
     apply();
     syncXrayLabel();

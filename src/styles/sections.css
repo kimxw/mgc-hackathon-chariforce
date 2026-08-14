@@ -286,12 +286,31 @@ body.phases-active .phase-scroll{touch-action:none}
   color:var(--txt);max-width:16ch;margin-top:10px}
 
 @media (max-width:900px){
-  .why-hero{min-height:0}
+  /* display:block instead of flex: the flex row's shrink-to-fit sizing was
+     letting .container size itself to its content's intrinsic width (the
+     video's native pixel dimensions, well over the viewport) instead of
+     filling the available width — the same large, unintended margin on
+     both sides regardless of --gutter. Block gives it a normal width:auto
+     that just fills its parent; the flex centering was only ever needed
+     to vertically center short content inside the tall desktop min-height,
+     which is already zeroed out here. */
+  .why-hero{min-height:0;display:block}
   .why-hero .container{grid-template-columns:1fr;gap:32px}
+  .why-col{align-items:center;text-align:center}
+  .why-h1{max-width:none;margin:0 auto 36px}
   /* !important overrides the JS-set inline height (whyStarted.js) — that
      height-match only makes sense next to the text column; stacked, the
      video should just be a plain full-width 16/9 like anywhere else. */
   .why-video-wrap{height:auto!important;max-width:none}
+  /* Grid instead of flex-wrap here: the two stats' combined width (each
+     label up to 16ch) reliably exceeds a phone's viewport, so flex-wrap
+     just stacked them — a fixed grid with a shorter label cap forces them
+     side by side instead. auto (not 1fr) columns so they pack left,
+     content-width, rather than each stretching to fill half the row with
+     a big equally-spaced gap between them. */
+  .why-stats{display:grid;grid-template-columns:auto auto;justify-content:center;gap:8px 32px}
+  .why-stat{text-align:left}
+  .why-stat-label{max-width:12ch}
 }
 
 /* ---- Scroll reveal — fade + rise + unblur, once, on first entry

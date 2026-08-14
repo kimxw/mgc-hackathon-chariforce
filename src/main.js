@@ -2,6 +2,7 @@
 // scene-graph construction as a side effect, in dependency order: scene ->
 // chassis -> wheels/seat (depend on chassis) -> patient/surface (depend on
 // seat) -> cameraRig (registers pointer/wheel listeners) -> apply/loop.
+import './posthog.js';
 import './engine/scene.js';
 import './engine/chassis.js';
 import { wheelsGrp, buildWheels } from './engine/wheels.js';
