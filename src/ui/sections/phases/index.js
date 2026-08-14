@@ -116,6 +116,15 @@ export function buildPhasesSection() {
     sheetHandle.setAttribute('aria-expanded', String(open));
   };
   sheetHandle.onclick = () => setSheetOpen(!mobileSheet.classList.contains('open'));
+  // Re-fit once the sheet's own height transition (panels.css, .sheet-body
+  // max-height) actually finishes — refitting mid-transition would measure
+  // a still-animating (wrong) height. Phase 1's bounds include the bed
+  // (computeBounds() in cameraRig.js), so it sits lower in frame than
+  // phases 2/3's chair-only bounds; without this it was the one that
+  // actually got clipped behind the sheet on open, not just less centered.
+  sheetBody.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'max-height' && store.get().autoFit) fitView();
+  });
   // tapping the model (or anywhere else) tucks the sheet away again, same
   // as the nav dropdown — it shouldn't have to be manually collapsed
   // before the user can see/orbit what it was covering
@@ -221,7 +230,11 @@ export function buildPhasesSection() {
 
   registerPad(viewBar);
   registerPad(p1.barContent); // the actual fixed-position bar, not its (zero-size) wrapper
-  registerPad(nextBtn);
+  // nextBtn deliberately NOT registered: it's a small mobile-only pill
+  // anchored to the right edge with nothing matching it on the left, so
+  // reserving space for it skewed computePad()'s l/r symmetry and pushed
+  // the whole model off-center to the left on every mobile phase — a much
+  // worse trade than the pill occasionally floating over a corner of it.
 
   return { sectionEls: [phase1El, phase2El, phase3El], setPhase };
 }
