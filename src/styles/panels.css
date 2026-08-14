@@ -11,22 +11,27 @@
    etc. declarations further down this file, so this hide always wins
    regardless of source order */
 body:not(.phases-active) .cf-panel-l,body:not(.phases-active) .cf-panel-r,
-body:not(.phases-active) .cf-viewbar,
+body:not(.phases-active) .cf-viewbar,body:not(.phases-active) .mobile-sheet,
 body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!important}
 
 /* top offset clears the fixed site nav (~64px) so panel corners don't sit
    underneath it. left/right offsets use --gutter, same as the nav and every
    .container-based section, so this panel's edge lines up with the rest of
    the app instead of sitting at its own tighter fixed margin. */
-.cf-panel-l{top:80px;left:var(--gutter);width:400px;padding:22px 26px 22px;max-height:calc(100vh - 96px);overflow-y:auto}
+/* +env(safe-area-inset-top) on both the offset and the height cap: on a
+   notched phone the fixed nav (nav.css) grows by that same inset, so a
+   plain 80px top here would tuck the panel corner under the taller bar. */
+.cf-panel-l{top:calc(80px + env(safe-area-inset-top));left:var(--gutter);width:400px;padding:22px 26px 22px;
+  max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));overflow-y:auto}
 /* right panel sits below the view-controls toolbar, which owns the top of
    this corner now */
-.cf-panel-r{top:198px;right:var(--gutter);width:264px;padding:14px 16px;max-height:calc(100vh - 214px);overflow-y:auto}
+.cf-panel-r{top:calc(198px + env(safe-area-inset-top));right:var(--gutter);width:264px;padding:14px 16px;
+  max-height:calc(100vh - 214px - env(safe-area-inset-top));max-height:calc(100dvh - 214px - env(safe-area-inset-top));overflow-y:auto}
 .cf-panel-l::-webkit-scrollbar,.cf-panel-r::-webkit-scrollbar{width:7px}
 .cf-panel-l::-webkit-scrollbar-thumb,.cf-panel-r::-webkit-scrollbar-thumb{background:#cecbc4;border-radius:4px}
 
 /* compact top-right view-controls toolbar */
-.cf-viewbar{top:72px;right:var(--gutter);width:264px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.cf-viewbar{top:calc(72px + env(safe-area-inset-top));right:var(--gutter);width:264px;padding:10px;display:flex;flex-direction:column;gap:6px}
 .cf-vb-row{display:flex;gap:5px}
 .cf-viewbar .cf-btn{padding:6px 4px;font-size:10px}
 
@@ -90,7 +95,7 @@ body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!
   font-size:10.5px;color:var(--txt-dim);line-height:1.5}
 .cf-fitted b{color:var(--txt)}
 
-.cf-bar{bottom:16px;left:50%;transform:translateX(-50%);padding:11px 15px;display:flex;
+.cf-bar{bottom:calc(16px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);padding:11px 15px;display:flex;
   align-items:center;gap:12px;width:min(560px,calc(100vw - 32px))}
 .cf-bar .cf-btn{flex:none;min-width:74px}
 .cf-scrub{flex:1;margin:0;height:16px;accent-color:var(--accent)}
@@ -105,21 +110,52 @@ body:not(.phases-active) .cf-bar,body:not(.phases-active) .cf-hint{display:none!
 
 .cf-chrome{transition:opacity .3s}
 
-/* Mobile: the two fixed side panels (302px + 264px) don't fit next to a
-   usable 3D view on a phone screen. Stack them at the bottom instead,
-   each capped to a fraction of viewport height with its own scroll, so
-   the model stays visible above them rather than fully obscured. */
+/* Sheet handle only exists as UI below 760px — see the media query — but
+   the element is always in the DOM (phases/index.js), so it needs a
+   default-hidden base rule rather than relying solely on the media query
+   to keep it out of desktop's layout. */
+.sheet-handle{display:none}
+
+/* Mobile: stacking the two corner panels at fixed heights left the 3D
+   model a sliver at the top of a phone screen — the model, not the
+   controls, has to be the thing that's actually visible by default. This
+   replaces the desktop corner panels with a single collapsible bottom
+   sheet (same leftPanel/rightPanel content, reparented — no separate data
+   path) that's just a compact handle until the user asks for detail. */
 @media (max-width:760px){
-  .cf-panel-l,.cf-panel-r{position:fixed;left:10px;right:10px;width:auto;top:auto;
-    max-height:29vh;border-radius:14px}
-  .cf-panel-r{bottom:calc(10px + 29vh + 8px)}
-  .cf-panel-l{bottom:10px}
-  body.phases-active.mobile-has-bar .cf-panel-l{bottom:70px}
-  body.phases-active.mobile-has-bar .cf-panel-r{bottom:calc(70px + 29vh + 8px)}
-  .cf-bar{bottom:10px;padding:8px 10px}
+  .mobile-sheet{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));
+    background:var(--panel);backdrop-filter:blur(10px);
+    border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(20,20,18,.12);
+    z-index:5;overflow:hidden}
+  body.phases-active.mobile-has-bar .mobile-sheet{bottom:calc(66px + env(safe-area-inset-bottom))}
+
+  .sheet-handle{display:flex;align-items:center;gap:10px;width:100%;
+    padding:13px 14px;background:none;border:0;cursor:pointer;text-align:left;
+    -webkit-tap-highlight-color:transparent}
+  .sheet-badge{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;
+    display:grid;place-items:center;font:700 12px/1 var(--font-mono)}
+  .sheet-title{flex:1;font-size:14.5px;font-weight:700;color:var(--txt);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sheet-chev{flex:none;width:18px;height:18px;color:var(--txt-dim);transition:transform .25s}
+  .mobile-sheet.open .sheet-chev{transform:rotate(180deg)}
+
+  .sheet-body{max-height:0;overflow-y:auto;transition:max-height .3s ease}
+  .mobile-sheet.open .sheet-body{max-height:56vh;max-height:56dvh}
+
+  /* the two former corner panels become plain stacked content inside the
+     sheet body instead of independently fixed-positioned boxes */
+  .mobile-sheet .cf-panel-l,.mobile-sheet .cf-panel-r{position:static;width:auto;max-height:none;
+    top:auto;left:auto;right:auto;bottom:auto;border:0;box-shadow:none;background:none;
+    backdrop-filter:none;border-radius:0;padding:0 14px 16px}
+  .mobile-sheet .cf-panel-r{border-top:1px solid var(--line);padding-top:14px;margin-top:2px}
+
+  .cf-bar{bottom:calc(10px + env(safe-area-inset-bottom));padding:8px 10px}
   .cf-hint{display:none!important}
   /* view toolbar shrinks and drops the two rarest controls rather than
-     competing with the timeline/CTA for top-of-screen space */
-  .cf-viewbar{top:60px;width:150px;padding:7px;gap:4px}
-  .cf-viewbar .cf-btn{padding:5px 3px;font-size:9px}
+     competing with the timeline/CTA for top-of-screen space. Buttons stay
+     under the usual ~44px tap-target guidance — a compromise for a 3-across
+     secondary toolbar this narrow — but get a bit more room than the bare
+     desktop padding to stay comfortably tappable. */
+  .cf-viewbar{top:calc(60px + env(safe-area-inset-top));width:150px;padding:7px;gap:4px}
+  .cf-viewbar .cf-btn{padding:9px 3px;font-size:9px}
 }

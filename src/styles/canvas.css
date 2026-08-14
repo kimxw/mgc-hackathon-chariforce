@@ -1,7 +1,13 @@
+/* height:100vh is a pre-JS fallback only — main.js's resize() sets an
+   explicit inline pixel height on load/resize (real innerHeight, not the
+   CSS vh unit, which mobile Safari can compute against the wrong viewport
+   before the address bar settles) and that inline style wins immediately. */
 #cv{position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;outline:none;z-index:0;
   touch-action:pan-y}
-/* while the Phases section owns the interaction (pinned/active), drag must
-   orbit the model rather than being hijacked as a page scroll */
-body.phases-active #cv{touch-action:none}
+/* touch-action stays pan-y even during the Phases section (not "none"):
+   cameraRig.js now splits the axes itself — horizontal drag orbits,
+   vertical drag is left to native scroll, which is what scrubs the
+   phase-1 animation (ui/phaseScroll.js). Blocking pan-y here would fight
+   that scroll wherever #cv is the actual hit target. */
 
 #story{position:relative;z-index:1}

@@ -99,7 +99,7 @@ export function manual() {
 // is fragile; this way orbit-drag works regardless of what's in the DOM
 // above the canvas, and is only live during the phases the chair is
 // actually visible in.
-let dragging = false, panning = false, lx = 0, ly = 0;
+let dragging = false, panning = false, touchDrag = false, lx = 0, ly = 0;
 function activeAndNotChrome(e) {
   return document.body.classList.contains('phases-active') && !e.target.closest('.cf-chrome');
 }
@@ -107,6 +107,7 @@ document.addEventListener('contextmenu', (e) => { if (activeAndNotChrome(e)) e.p
 document.addEventListener('pointerdown', (e) => {
   if (!activeAndNotChrome(e)) return;
   dragging = true; panning = (e.button === 2 || e.button === 1 || e.shiftKey);
+  touchDrag = e.pointerType === 'touch';
   lx = e.clientX; ly = e.clientY;
   if (store.get().spin) store.set({ spin: false });
 });
@@ -121,7 +122,16 @@ document.addEventListener('pointermove', (e) => {
     const per = (2 * cam.radius * Math.tan((camera.fov * Math.PI) / 360)) / innerHeight;
     cam.panX -= dx * per; cam.panY += dy * per; updCam();
   } else {
-    cam.theta -= dx * 0.007; cam.phi -= dy * 0.007;
+    cam.theta -= dx * 0.007;
+    // Touch has no separate scroll input the way a mouse has a wheel, so a
+    // vertical finger-drag is ambiguous: it's also how phaseScroll.js
+    // scrubs the phase-1 animation via native page scroll. Applying both at
+    // once reads as broken (the chair tilts AND the timeline scrubs off one
+    // swipe). Horizontal orbit is unambiguous — touch-action:pan-y
+    // (canvas.css) already keeps the browser from treating sideways drags
+    // as a scroll — so touch keeps that axis and leaves vertical motion to
+    // scroll/scrub, mirroring a mouse's wheel-scrubs / drag-orbits split.
+    if (!touchDrag) cam.phi -= dy * 0.007;
     if (store.get().autoFit) fitView(); else updCam();
   }
 });

@@ -1,5 +1,6 @@
 #site-nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;gap:28px;
-  padding:16px var(--gutter);background:linear-gradient(rgba(247,247,245,.78),rgba(247,247,245,0));
+  padding:calc(16px + env(safe-area-inset-top)) max(var(--gutter),env(safe-area-inset-left)) 16px max(var(--gutter),env(safe-area-inset-left));
+  background:linear-gradient(rgba(247,247,245,.78),rgba(247,247,245,0));
   pointer-events:none}
 #site-nav > *{pointer-events:auto}
 
@@ -14,6 +15,25 @@
   padding:10px 18px;border-radius:999px;text-decoration:none;transition:.15s}
 .nav-cta:hover{opacity:.85}
 
+/* Hamburger toggle — desktop-hidden, only relevant once .nav-links folds
+   into a dropdown below 760px. min 44px tap target even though the icon
+   itself reads smaller, via padding rather than a bigger icon. */
+.nav-toggle{display:none;flex:none;background:none;border:0;cursor:pointer;color:var(--txt);
+  width:44px;height:44px;margin:-10px -8px -10px 0;align-items:center;justify-content:center;
+  border-radius:var(--radius-sm)}
+.nav-toggle:hover{background:rgba(20,20,20,.06)}
+.nav-toggle svg{width:22px;height:22px}
+
 @media (max-width:760px){
-  .nav-links{display:none}
+  .nav-cta{padding:9px 14px;font-size:11.5px}
+
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:2px;
+    background:var(--bg-raised);border-bottom:1px solid var(--line);
+    padding:8px max(var(--gutter),env(safe-area-inset-left)) calc(14px + env(safe-area-inset-bottom));
+    box-shadow:0 16px 28px rgba(20,20,20,.1)}
+  .nav-links.open{display:flex}
+  .nav-links a{font-size:15px;padding:12px 4px;border-top:1px solid var(--line)}
+  .nav-links a:first-child{border-top:0}
+
+  .nav-toggle{display:flex}
 }

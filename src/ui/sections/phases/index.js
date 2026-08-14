@@ -4,7 +4,7 @@ import { bed } from '../../../engine/surface.js';
 import { contact } from '../../../engine/surface.js';
 import { apply } from '../../../engine/apply.js';
 import { view, fitView } from '../../../engine/cameraRig.js';
-import { registerPad } from '../../../engine/panelRegistry.js';
+import { registerPad, unregisterPad } from '../../../engine/panelRegistry.js';
 import { buildPhase1 } from './phase1Transfer.js';
 import { buildPhase2 } from './phase2Modular.js';
 import { buildPhase3 } from './phase3Configure.js';
@@ -92,6 +92,58 @@ export function buildPhasesSection() {
   ]);
   const rightPanel = el('div', { class: 'cf-panel cf-panel-r cf-chrome' }, []);
   const barSlot = el('div', {});
+
+  // ---- Mobile bottom sheet ----------------------------------------------
+  // Desktop keeps the two corner panels exactly as they were (this wrapper
+  // has no box of its own there — leftPanel/rightPanel are position:fixed,
+  // so a plain div around them collapses to zero size and never touches
+  // desktop layout). Below 760px it becomes a real collapsible sheet
+  // instead of a shrunk copy of the desktop corners: stacking both panels
+  // at fixed 29vh caps left the 3D model a sliver at the top of a phone
+  // screen — exactly the "hidden behind controls" failure a configurator
+  // can't ship with. Both breakpoints render the SAME leftPanel/rightPanel
+  // content/state; only the container around them differs.
+  const CHEV = '<svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const sheetBadge = el('span', { class: 'sheet-badge' }, '1');
+  const sheetTitle = el('span', { class: 'sheet-title' }, PHASE_META[0].title);
+  const sheetHandle = el('button', {
+    class: 'sheet-handle', type: 'button', 'aria-expanded': 'false', 'aria-controls': 'sheet-body',
+  }, [sheetBadge, sheetTitle, el('span', { class: 'sheet-chev', html: CHEV })]);
+  const sheetBody = el('div', { class: 'sheet-body', id: 'sheet-body' }, [leftPanel, rightPanel]);
+  const mobileSheet = el('div', { class: 'mobile-sheet cf-chrome' }, [sheetHandle, sheetBody]);
+  const setSheetOpen = (open) => {
+    mobileSheet.classList.toggle('open', open);
+    sheetHandle.setAttribute('aria-expanded', String(open));
+  };
+  sheetHandle.onclick = () => setSheetOpen(!mobileSheet.classList.contains('open'));
+  // tapping the model (or anywhere else) tucks the sheet away again, same
+  // as the nav dropdown — it shouldn't have to be manually collapsed
+  // before the user can see/orbit what it was covering
+  document.addEventListener('pointerdown', (e) => {
+    if (mobileSheet.classList.contains('open') && !e.target.closest('.mobile-sheet')) setSheetOpen(false);
+  });
+
+  // Which elements represent "the panel corner" for the camera's auto-fit
+  // padding (engine/panelRegistry.js) differs by breakpoint too: on mobile,
+  // leftPanel/rightPanel report their full (uncollapsed) content size
+  // regardless of the sheet being visually collapsed — getBoundingClientRect
+  // isn't clipped by an ancestor's overflow — so the camera would keep
+  // reserving space for an expanded sheet even while it's collapsed to a
+  // handle. Registering mobileSheet instead (its OWN height really is just
+  // the handle when collapsed) fixes that; desktop keeps the precise
+  // per-panel registration it already had.
+  const panelMQ = matchMedia('(max-width:760px)');
+  function syncPanelPads() {
+    if (panelMQ.matches) {
+      unregisterPad(leftPanel); unregisterPad(rightPanel);
+      registerPad(mobileSheet);
+    } else {
+      unregisterPad(mobileSheet);
+      registerPad(leftPanel); registerPad(rightPanel);
+    }
+  }
+  syncPanelPads();
+  panelMQ.addEventListener('change', syncPanelPads);
   const hint = el('div', { class: 'cf-hint cf-chrome' }, [
     'scroll to play it out · drag orbit · shift-drag pan · ',
     el('b', {}, 'space'),
@@ -112,7 +164,10 @@ export function buildPhasesSection() {
     rightPanel.innerHTML = ''; rightPanel.appendChild(byPhase[n].rightContent);
     barSlot.innerHTML = '';
     if (n === 1) barSlot.appendChild(p1.barContent);
-    document.body.classList.toggle('mobile-has-bar', n === 1); // mobile CSS lifts the stacked panels clear of the bar
+    document.body.classList.toggle('mobile-has-bar', n === 1); // mobile CSS lifts the sheet clear of the bar
+    sheetBadge.textContent = String(n);
+    sheetTitle.textContent = PHASE_META[n - 1].title;
+    setSheetOpen(false); // start collapsed on every phase change — the model, not the sheet, should greet a new phase
 
     const cam = store.get().camera;
     if (n === 1) {
@@ -140,7 +195,7 @@ export function buildPhasesSection() {
   // The overlay (panels/bar/hint) is fixed-position chrome, shown or hidden
   // by phaseScroll.js via body.phases-active — it doesn't need to live
   // "inside" any one phase section, so it's just parked in phase 1's.
-  const overlay = el('div', { class: 'phases-overlay' }, [leftPanel, rightPanel, viewBar, barSlot, hint]);
+  const overlay = el('div', { class: 'phases-overlay' }, [mobileSheet, viewBar, barSlot, hint]);
 
   // Three separate scroll-length sections, IKEA-configurator style: phase 1
   // is tall enough that scrolling through it scrubs the transfer animation
@@ -150,8 +205,6 @@ export function buildPhasesSection() {
   const phase2El = el('section', { id: 'sec-phase2', class: 'phase-scroll phase-scroll-2' }, []);
   const phase3El = el('section', { id: 'sec-phase3', class: 'phase-scroll phase-scroll-3' }, []);
 
-  registerPad(leftPanel);
-  registerPad(rightPanel);
   registerPad(viewBar);
   registerPad(p1.barContent); // the actual fixed-position bar, not its (zero-size) wrapper
 

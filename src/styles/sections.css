@@ -9,12 +9,17 @@
    the card matches .cf-panel-l's nav clearance (panels.css); left/right/
    bottom use --gutter like every other piece of chrome, so its edges land
    in the same place hero-frame's do. */
-#sec-hero-cover{min-height:100vh;padding:0;background:var(--bg)}
+/* 100vh first as a fallback for browsers without dvh support; 100dvh
+   overrides it where supported, tracking the mobile browser's ACTUAL
+   visible viewport (address bar shown/hidden) instead of the tallest
+   possible one, so the card + its bottom cue don't sit partly offscreen
+   until the chrome collapses. */
+#sec-hero-cover{min-height:100vh;min-height:100dvh;padding:0;background:var(--bg)}
 .hero-cover{position:absolute;top:80px;left:var(--gutter);right:var(--gutter);bottom:var(--gutter);
   border-radius:32px;overflow:hidden;background:var(--bg-raised);border:1px solid var(--line);
   box-shadow:0 24px 60px rgba(20,20,20,.12)}
 .hero-cover img{width:100%;height:100%;object-fit:cover;object-position:center 25%;display:block}
-.hero-cover-cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:1;
+.hero-cover-cue{position:absolute;left:50%;bottom:max(28px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:1;
   display:flex;flex-direction:row;align-items:center;gap:8px;
   font:600 12.5px/1 var(--font-sans);letter-spacing:.4px;color:#fff;
   padding:10px 18px;border-radius:999px;background:rgba(20,20,20,.32);backdrop-filter:blur(6px);
@@ -22,6 +27,13 @@
 .hero-cover-cue-chev{width:14px;height:14px;line-height:0}
 .hero-cover-cue-chev svg{width:100%;height:100%}
 @keyframes hero-cue-bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
+@media (prefers-reduced-motion:reduce){
+  .hero-cover-cue{animation:none}
+}
+
+@media (max-width:480px){
+  .hero-cover{top:72px}
+}
 
 /* ---- Partners row (ui/sections/partners.js) ----
    Sits between the cover splash and the real hero. Static and centered —
@@ -234,4 +246,12 @@
   .stat-grid{grid-template-columns:repeat(2,1fr)}
   .options-grid{grid-template-columns:1fr}
   .summary-grid,.purchase-grid{grid-template-columns:1fr}
+}
+
+/* narrow phones: two stat columns get tight once the 46px-min figures
+   (clamp() in .stat-card .big) stop shrinking with the viewport */
+@media (max-width:420px){
+  .stat-grid{grid-template-columns:1fr}
+  .stat-card{border-left:0;border-top:1px solid var(--line);padding:20px 0 0}
+  .stat-card:first-child{border-top:0;padding-top:0}
 }
